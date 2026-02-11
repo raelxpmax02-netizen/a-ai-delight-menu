@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
 import CartSection from '@/components/CartSection';
 import CheckoutSection from '@/components/CheckoutSection';
@@ -11,6 +12,7 @@ const Index = () => {
   
   const sectionRefs = {
     inicio: useRef<HTMLDivElement>(null),
+    sobre: useRef<HTMLDivElement>(null),
     cardapio: useRef<HTMLDivElement>(null),
     carrinho: useRef<HTMLDivElement>(null),
     finalizar: useRef<HTMLDivElement>(null),
@@ -51,6 +53,10 @@ const Index = () => {
       
       <div ref={sectionRefs.inicio}>
         <Hero onNavigate={scrollToSection} />
+      </div>
+
+      <div ref={sectionRefs.sobre}>
+        <AboutSection />
       </div>
       
       <div ref={sectionRefs.cardapio}>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import { LOGO_URL, WHATSAPP_NUMBER } from '@/data/products';
+import { LOGO_URL, WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
 import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
@@ -23,6 +23,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
   }, []);
 
   const navItems = [
+    { id: 'sobre', label: 'Sobre' },
     { id: 'cardapio', label: 'Cardápio' },
     { id: 'carrinho', label: 'Carrinho' },
     { id: 'finalizar', label: 'Finalizar' },
@@ -41,7 +42,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
             onClick={() => onNavigate('inicio')}
           >
             <img
-              alt="Açaiteria Capixaba"
+              alt={STORE_NAME}
               className="h-12 w-12 object-contain"
               src={LOGO_URL}
             />
@@ -50,7 +51,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
                 isScrolled ? 'text-card-foreground' : 'text-white'
               }`}
             >
-              Açaiteria Capixaba
+              {STORE_NAME}
             </span>
           </div>
 
