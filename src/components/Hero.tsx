@@ -1,4 +1,4 @@
-import { HERO_IMAGE, WHATSAPP_NUMBER } from '@/data/products';
+import { HERO_IMAGE, WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
 
 interface HeroProps {
   onNavigate: (section: string) => void;
@@ -21,12 +21,10 @@ const Hero = ({ onNavigate }: HeroProps) => {
 
       <div className="relative z-10 container mx-auto px-4 text-center text-white w-full">
         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-          O Melhor Açaí de
-          <br />
-          Guarulhos
+          {STORE_NAME}
         </h1>
         <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl mx-auto">
-          Faça seu pedido de forma rápida e prática direto pelo WhatsApp
+          Açaí cremoso, fresquinho e montado do jeitinho que você gosta
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button

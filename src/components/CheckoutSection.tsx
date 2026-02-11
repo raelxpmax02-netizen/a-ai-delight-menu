@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
-import { WHATSAPP_NUMBER } from '@/data/products';
+import { WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,7 +62,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
     }
 
     // Build the WhatsApp message
-    let message = `🍇 *PEDIDO AÇAITERIA CAPIXABA*\n\n`;
+    let message = `🍇 *PEDIDO ${STORE_NAME.toUpperCase()}*\n\n`;
     message += `👤 *Cliente:* ${name.trim()}\n`;
     message += `📍 *Endereço:* ${address.trim()}\n\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;

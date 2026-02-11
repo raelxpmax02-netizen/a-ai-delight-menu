@@ -18,7 +18,8 @@ const SizeCard = ({ size, onCustomize }: SizeCardProps) => {
         />
       </div>
       <CardContent className="p-6">
-        <h3 className="text-xl font-bold text-card-foreground mb-2">{size.label}</h3>
+        <h3 className="text-xl font-bold text-card-foreground mb-1">{size.label}</h3>
+        <p className="text-sm text-muted-foreground mb-3">{size.description}</p>
         <p className="text-3xl font-bold text-primary mb-4">
           R$ {size.price.toFixed(2).replace('.', ',')}
         </p>
