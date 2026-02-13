@@ -1,4 +1,5 @@
-import { LOGO_URL, WHATSAPP_NUMBER, STORE_NAME, STORE_ADDRESS, STORE_HOURS, STORE_PHONE } from '@/data/products';
+import { WHATSAPP_NUMBER, STORE_NAME, STORE_ADDRESS, STORE_HOURS, STORE_PHONE } from '@/data/products';
+import logoImage from '@/assets/logo.jpg';
 
 const Footer = () => {
   return (
@@ -10,7 +11,7 @@ const Footer = () => {
               <img
                 alt={STORE_NAME}
                 className="h-12 w-12 object-contain"
-                src={LOGO_URL}
+                src={logoImage}
               />
               <span className="text-xl font-bold">{STORE_NAME}</span>
             </div>

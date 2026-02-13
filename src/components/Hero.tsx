@@ -1,4 +1,5 @@
-import { HERO_IMAGE, WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
+import { WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
+import heroImage from '@/assets/foto_03.jpg';
 
 interface HeroProps {
   onNavigate: (section: string) => void;
@@ -14,7 +15,7 @@ const Hero = ({ onNavigate }: HeroProps) => {
         <img
           alt="Açaí Capixaba"
           className="w-full h-full object-cover object-center"
-          src={HERO_IMAGE}
+          src={heroImage}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40"></div>
       </div>
