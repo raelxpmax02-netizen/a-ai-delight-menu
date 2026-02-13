@@ -5,6 +5,7 @@ import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
 import CartSection from '@/components/CartSection';
 import CheckoutSection from '@/components/CheckoutSection';
+import FloatingCart from '@/components/FloatingCart';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -50,7 +51,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Header onNavigate={scrollToSection} activeSection={activeSection} />
-      
+      <FloatingCart onNavigate={scrollToSection} />
       <div ref={sectionRefs.inicio}>
         <Hero onNavigate={scrollToSection} />
       </div>

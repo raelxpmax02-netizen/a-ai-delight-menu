@@ -66,6 +66,7 @@ export const sauces = [
 ];
 
 export const WHATSAPP_NUMBER = '5511977069676';
+export const INSTAGRAM_URL = 'https://www.instagram.com/mariah.acaiteria/';
 
 export const STORE_NAME = 'Mariah Açaíteria';
 
