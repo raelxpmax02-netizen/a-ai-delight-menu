@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import { LOGO_URL, WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
+import { WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
+import logoImage from '@/assets/logo.jpg';
 import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
@@ -44,7 +45,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
             <img
               alt={STORE_NAME}
               className="h-12 w-12 object-contain"
-              src={LOGO_URL}
+              src={logoImage}
             />
             <span
               className={`text-xl font-bold transition-colors ${
