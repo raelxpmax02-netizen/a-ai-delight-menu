@@ -32,7 +32,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
           <div className="text-center">
             <Button
               onClick={() => onNavigate('cardapio')}
-              className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors"
+              className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
             >
               Ver Cardápio
             </Button>

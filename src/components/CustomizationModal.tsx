@@ -104,7 +104,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModa
                   key={complement}
                   className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedFreeComplements.includes(complement)
-                      ? 'bg-teal-50 border-primary'
+                      ? 'bg-purple-50 border-primary'
                       : 'bg-white border-border hover:border-primary/50'
                   }`}
                   onClick={() => toggleFreeComplement(complement)}
@@ -131,7 +131,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModa
                   key={complement.name}
                   className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedPaidComplements.includes(complement.name)
-                      ? 'bg-teal-50 border-primary'
+                      ? 'bg-purple-50 border-primary'
                       : 'bg-white border-border hover:border-primary/50'
                   }`}
                   onClick={() => togglePaidComplement(complement.name)}
@@ -158,7 +158,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModa
                   key={sauce}
                   className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedSauce === sauce
-                      ? 'bg-teal-50 border-primary'
+                      ? 'bg-purple-50 border-primary'
                       : 'bg-white border-border hover:border-primary/50'
                   }`}
                   onClick={() => setSelectedSauce(sauce)}
@@ -188,7 +188,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModa
             </div>
             <Button
               onClick={handleAddToCart}
-              className="w-full bg-primary text-primary-foreground py-4 rounded-lg font-semibold hover:bg-teal-700 transition-colors text-lg"
+              className="w-full bg-primary text-primary-foreground py-4 rounded-lg font-semibold hover:bg-purple-700 transition-colors text-lg"
             >
               Adicionar ao Carrinho
             </Button>

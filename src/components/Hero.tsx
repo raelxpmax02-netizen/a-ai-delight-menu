@@ -30,7 +30,7 @@ const Hero = ({ onNavigate }: HeroProps) => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button
             onClick={() => onNavigate('cardapio')}
-            className="bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-semibold hover:bg-teal-700 transition-all transform hover:scale-105 whitespace-nowrap shadow-xl"
+            className="bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 transition-all transform hover:scale-105 whitespace-nowrap shadow-xl"
           >
             Ver Cardápio
           </button>
