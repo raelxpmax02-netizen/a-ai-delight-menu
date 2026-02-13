@@ -44,7 +44,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
           >
             <img
               alt={STORE_NAME}
-              className="h-12 w-12 object-contain"
+              className="h-9 w-9 object-cover rounded-full"
               src={logoImage}
             />
             <span
