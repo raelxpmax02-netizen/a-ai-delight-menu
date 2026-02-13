@@ -25,7 +25,7 @@ const SizeCard = ({ size, onCustomize }: SizeCardProps) => {
         </p>
         <Button
           onClick={() => onCustomize(size)}
-          className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors"
+          className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
         >
           Personalizar
         </Button>

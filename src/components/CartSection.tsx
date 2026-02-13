@@ -32,7 +32,7 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                 </p>
                 <Button
                   onClick={() => onNavigate('cardapio')}
-                  className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors"
+                  className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
                 >
                   Ver Cardápio
                 </Button>
@@ -136,7 +136,7 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
 
           <Button
             onClick={() => onNavigate('finalizar')}
-            className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-semibold hover:bg-teal-700 transition-colors text-lg"
+            className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-semibold hover:bg-purple-700 transition-colors text-lg"
           >
             Finalizar Pedido
           </Button>

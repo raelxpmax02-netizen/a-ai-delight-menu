@@ -62,7 +62,7 @@ const AboutSection = () => {
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full bg-primary text-primary-foreground text-center py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors"
+                className="block w-full bg-primary text-primary-foreground text-center py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
               >
                 Fazer Pedido Agora
               </a>
