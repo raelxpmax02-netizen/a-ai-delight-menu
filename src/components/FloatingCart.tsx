@@ -15,7 +15,6 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
 
   return (
     <>
-      {/* Floating button */}
       <button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 z-50 bg-primary text-primary-foreground w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-transform"
@@ -26,7 +25,6 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
         </span>
       </button>
 
-      {/* Side panel */}
       {isOpen && (
         <>
           <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setIsOpen(false)} />
@@ -47,14 +45,16 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
+                  {item.fruit && (
+                    <p className="text-xs text-muted-foreground">Fruta: {item.fruit}</p>
+                  )}
                   {item.freeComplements.length > 0 && (
                     <p className="text-xs text-muted-foreground">Complementos: {item.freeComplements.join(', ')}</p>
                   )}
-                  {item.paidComplements.length > 0 && (
-                    <p className="text-xs text-muted-foreground">Extras: {item.paidComplements.join(', ')}</p>
-                  )}
-                  {item.sauce && (
-                    <p className="text-xs text-muted-foreground">Calda: {item.sauce}</p>
+                  {item.adicionais.length > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      Adicionais: {item.adicionais.map(a => a.name).join(', ')}
+                    </p>
                   )}
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center gap-2">
@@ -83,7 +83,7 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
               </div>
               <Button
                 onClick={() => { setIsOpen(false); onNavigate('finalizar'); }}
-                className="w-full bg-primary text-primary-foreground py-3 rounded-xl font-semibold hover:opacity-90 transition-colors"
+                className="w-full py-3 rounded-xl font-semibold"
               >
                 Finalizar Pedido
               </Button>

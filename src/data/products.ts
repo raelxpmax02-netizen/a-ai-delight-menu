@@ -1,8 +1,11 @@
+export type AcaiType = 'tradicional' | 'trufado';
+
 export interface AcaiSize {
   id: string;
   label: string;
   size: string;
-  price: number;
+  priceTradicional: number;
+  priceTrufado: number;
   image: string;
   description: string;
 }
@@ -12,44 +15,52 @@ export const acaiSizes: AcaiSize[] = [
     id: '300ml',
     label: 'Açaí 300ml',
     size: '300ml',
-    price: 14.00,
+    priceTradicional: 12.00,
+    priceTrufado: 15.00,
     description: 'Perfeito para um lanche rápido',
     image: '/assets/foto_01.jpg',
+  },
+  {
+    id: '400ml',
+    label: 'Açaí 400ml',
+    size: '400ml',
+    priceTradicional: 16.00,
+    priceTrufado: 20.00,
+    description: 'Tamanho ideal para matar a fome',
+    image: '/assets/foto_04.jpg',
   },
   {
     id: '500ml',
     label: 'Açaí 500ml',
     size: '500ml',
-    price: 18.00,
-    description: 'Tamanho ideal para matar a fome',
-    image: '/assets/foto_04.jpg',
-  },
-  {
-    id: '700ml',
-    label: 'Açaí 700ml',
-    size: '700ml',
-    price: 25.00,
+    priceTradicional: 19.00,
+    priceTrufado: 25.00,
     description: 'Para quem ama açaí',
     image: '/assets/foto_03.jpg',
   },
-  {
-    id: '1L',
-    label: 'Açaí 1 Litro',
-    size: '1 Litro',
-    price: 35.00,
-    description: 'Tamanho da família',
-    image: '/assets/foto_02.jpg',
-  },
 ];
+
+export const fruits = ['Banana', 'Uva', 'Morango'];
 
 export const freeComplements = [
-  'Granola',
   'Leite em pó',
+  'Ovomaltine',
+  'Sucrilhos',
+  'Chocoboll',
   'Paçoca',
-  'Banana',
-  'Morango',
+  'Granola',
+  'Amendoim',
+  'Cobertura fini - morango',
+  'Cobertura fini - banana',
 ];
 
+export const adicionais = [
+  { name: 'Adicional complemento', price: 4.00, description: 'Fruta e adicionais tradicionais' },
+  { name: 'Adicional Gourmet', price: 6.00, description: 'Creme de avelã, Creme de ninho e Ao leite' },
+  { name: 'Adicional Nutella', price: 7.00, description: '' },
+];
+
+// Keep for backward compatibility but no longer used in new menu
 export const paidComplements = [
   { name: 'Leite Ninho', price: 2.00 },
   { name: 'Nutella', price: 2.00 },
@@ -92,4 +103,3 @@ export const STORE_HOURS = [
 ];
 
 export const STORE_PHONE = '(11) 97706-9676';
-// Logo and images are imported in components from @/assets/

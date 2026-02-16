@@ -19,23 +19,14 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
 
   if (items.length === 0) {
     return (
-      <section id="finalizar" className="py-20 bg-white">
+      <section id="finalizar" className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">
-              Finalizar Pedido
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Seu carrinho está vazio. Adicione itens para finalizar.
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">Finalizar Pedido</h2>
+            <p className="text-lg text-muted-foreground">Seu carrinho está vazio. Adicione itens para finalizar.</p>
           </div>
           <div className="text-center">
-            <Button
-              onClick={() => onNavigate('cardapio')}
-              className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
-            >
-              Ver Cardápio
-            </Button>
+            <Button onClick={() => onNavigate('cardapio')}>Ver Cardápio</Button>
           </div>
         </div>
       </section>
@@ -44,24 +35,14 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
 
   const handleSendWhatsApp = () => {
     if (!name.trim()) {
-      toast({
-        title: 'Nome obrigatório',
-        description: 'Por favor, informe seu nome para continuar.',
-        variant: 'destructive',
-      });
+      toast({ title: 'Nome obrigatório', description: 'Por favor, informe seu nome.', variant: 'destructive' });
       return;
     }
-
     if (!address.trim()) {
-      toast({
-        title: 'Endereço obrigatório',
-        description: 'Por favor, informe seu endereço para entrega.',
-        variant: 'destructive',
-      });
+      toast({ title: 'Endereço obrigatório', description: 'Por favor, informe seu endereço.', variant: 'destructive' });
       return;
     }
 
-    // Build the WhatsApp message
     let message = `🍇 *PEDIDO ${STORE_NAME.toUpperCase()}*\n\n`;
     message += `👤 *Cliente:* ${name.trim()}\n`;
     message += `📍 *Endereço:* ${address.trim()}\n\n`;
@@ -71,19 +52,15 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
 
     items.forEach((item, index) => {
       message += `*${index + 1}. ${item.sizeLabel}* (x${item.quantity})\n`;
-      
+      if (item.fruit) {
+        message += `   🍌 Fruta: ${item.fruit}\n`;
+      }
       if (item.freeComplements.length > 0) {
         message += `   ✓ Complementos: ${item.freeComplements.join(', ')}\n`;
       }
-      
-      if (item.paidComplements.length > 0) {
-        message += `   ✓ Extras: ${item.paidComplements.join(', ')} (+R$ ${(item.paidComplements.length * 2).toFixed(2).replace('.', ',')})\n`;
+      if (item.adicionais.length > 0) {
+        message += `   ✓ Adicionais: ${item.adicionais.map(a => `${a.name} (+R$${a.price.toFixed(2).replace('.', ',')})`).join(', ')}\n`;
       }
-      
-      if (item.sauce) {
-        message += `   ✓ Calda: ${item.sauce}\n`;
-      }
-      
       message += `   💰 R$ ${(item.totalPrice * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
     });
 
@@ -91,78 +68,46 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
     message += `💵 *TOTAL: R$ ${totalPrice.toFixed(2).replace('.', ',')}*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-    
-    toast({
-      title: 'Pedido enviado!',
-      description: 'Seu pedido foi enviado para o WhatsApp.',
-    });
 
+    toast({ title: 'Pedido enviado!', description: 'Seu pedido foi enviado para o WhatsApp.' });
     clearCart();
     setName('');
     setAddress('');
   };
 
   return (
-    <section id="finalizar" className="py-20 bg-white">
+    <section id="finalizar" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">
-            Finalizar Pedido
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Preencha seus dados para enviar o pedido via WhatsApp
-          </p>
+          <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">Finalizar Pedido</h2>
+          <p className="text-lg text-muted-foreground">Preencha seus dados para enviar o pedido via WhatsApp</p>
         </div>
 
         <div className="max-w-2xl mx-auto space-y-6">
-          {/* Customer Info */}
-          <Card className="bg-white rounded-xl shadow-md border border-border">
+          <Card className="rounded-xl shadow-md border border-border">
             <CardContent className="p-6 space-y-4">
               <div>
-                <Label htmlFor="name" className="text-card-foreground font-medium">
-                  Seu Nome *
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Digite seu nome"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-2"
-                />
+                <Label htmlFor="name" className="text-card-foreground font-medium">Seu Nome *</Label>
+                <Input id="name" placeholder="Digite seu nome" value={name} onChange={(e) => setName(e.target.value)} className="mt-2" />
               </div>
               <div>
-                <Label htmlFor="address" className="text-card-foreground font-medium">
-                  Endereço de Entrega *
-                </Label>
-                <Input
-                  id="address"
-                  type="text"
-                  placeholder="Rua, número, bairro"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="mt-2"
-                />
+                <Label htmlFor="address" className="text-card-foreground font-medium">Endereço de Entrega *</Label>
+                <Input id="address" placeholder="Rua, número, bairro" value={address} onChange={(e) => setAddress(e.target.value)} className="mt-2" />
               </div>
             </CardContent>
           </Card>
 
-          {/* Order Summary */}
           <Card className="bg-muted rounded-xl shadow-md">
             <CardContent className="p-6">
-              <h3 className="text-xl font-bold text-card-foreground mb-4">
-                Resumo do Pedido
-              </h3>
+              <h3 className="text-xl font-bold text-card-foreground mb-4">Resumo do Pedido</h3>
               <div className="space-y-3">
-                {items.map((item, index) => (
+                {items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span className="text-card-foreground">
                       {item.quantity}x {item.sizeLabel}
-                      {item.paidComplements.length > 0 && ` + ${item.paidComplements.length} extras`}
+                      {item.adicionais.length > 0 && ` + ${item.adicionais.length} adicionais`}
                     </span>
                     <span className="font-medium text-card-foreground">
                       R$ {(item.totalPrice * item.quantity).toFixed(2).replace('.', ',')}
@@ -172,16 +117,13 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
                 <div className="border-t border-border pt-3 mt-3">
                   <div className="flex justify-between">
                     <span className="text-xl font-bold text-card-foreground">Total:</span>
-                    <span className="text-2xl font-bold text-primary">
-                      R$ {totalPrice.toFixed(2).replace('.', ',')}
-                    </span>
+                    <span className="text-2xl font-bold text-primary">R$ {totalPrice.toFixed(2).replace('.', ',')}</span>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* WhatsApp Button */}
           <Button
             onClick={handleSendWhatsApp}
             className="w-full bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 transition-colors text-lg flex items-center justify-center gap-3"

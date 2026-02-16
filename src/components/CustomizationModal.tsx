@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { AcaiSize, freeComplements, paidComplements, sauces } from '@/data/products';
+import { AcaiSize, AcaiType, fruits, freeComplements, adicionais } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -16,65 +16,78 @@ interface CustomizationModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedSize: AcaiSize | null;
+  selectedType: AcaiType;
 }
 
-const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModalProps) => {
-  const [selectedFreeComplements, setSelectedFreeComplements] = useState<string[]>([]);
-  const [selectedPaidComplements, setSelectedPaidComplements] = useState<string[]>([]);
-  const [selectedSauce, setSelectedSauce] = useState<string>('');
+const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: CustomizationModalProps) => {
+  const [selectedFruit, setSelectedFruit] = useState<string>('');
+  const [selectedComplements, setSelectedComplements] = useState<string[]>([]);
+  const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
   const { addItem } = useCart();
   const { toast } = useToast();
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedFreeComplements([]);
-      setSelectedPaidComplements([]);
-      setSelectedSauce('');
+      setSelectedFruit('');
+      setSelectedComplements([]);
+      setSelectedAdicionais([]);
     }
   }, [isOpen]);
 
   if (!selectedSize) return null;
 
-  const toggleFreeComplement = (complement: string) => {
-    if (selectedFreeComplements.includes(complement)) {
-      setSelectedFreeComplements(prev => prev.filter(c => c !== complement));
-    } else if (selectedFreeComplements.length < 3) {
-      setSelectedFreeComplements(prev => [...prev, complement]);
+  const basePrice = selectedType === 'trufado' ? selectedSize.priceTrufado : selectedSize.priceTradicional;
+
+  const toggleComplement = (complement: string) => {
+    if (selectedComplements.includes(complement)) {
+      setSelectedComplements(prev => prev.filter(c => c !== complement));
+    } else if (selectedComplements.length < 2) {
+      setSelectedComplements(prev => [...prev, complement]);
     } else {
       toast({
         title: 'Limite atingido',
-        description: 'Você pode escolher no máximo 3 complementos gratuitos.',
+        description: 'Você pode escolher no máximo 2 complementos.',
         variant: 'destructive',
       });
     }
   };
 
-  const togglePaidComplement = (complement: string) => {
-    if (selectedPaidComplements.includes(complement)) {
-      setSelectedPaidComplements(prev => prev.filter(c => c !== complement));
+  const toggleAdicional = (name: string) => {
+    if (selectedAdicionais.includes(name)) {
+      setSelectedAdicionais(prev => prev.filter(a => a !== name));
     } else {
-      setSelectedPaidComplements(prev => [...prev, complement]);
+      setSelectedAdicionais(prev => [...prev, name]);
     }
   };
 
-  const paidComplementsTotal = selectedPaidComplements.length * 2;
-  const totalPrice = selectedSize.price + paidComplementsTotal;
+  const adicionaisTotal = selectedAdicionais.reduce((sum, name) => {
+    const item = adicionais.find(a => a.name === name);
+    return sum + (item?.price || 0);
+  }, 0);
+
+  const totalPrice = basePrice + adicionaisTotal;
 
   const handleAddToCart = () => {
+    const selectedAdicionaisItems = selectedAdicionais.map(name => {
+      const item = adicionais.find(a => a.name === name)!;
+      return { name: item.name, price: item.price };
+    });
+
     addItem({
       size: selectedSize.id,
-      sizeLabel: selectedSize.label,
-      basePrice: selectedSize.price,
-      freeComplements: selectedFreeComplements,
-      paidComplements: selectedPaidComplements,
-      sauce: selectedSauce,
+      sizeLabel: `${selectedSize.label} ${selectedType === 'trufado' ? '(Trufado)' : '(Tradicional)'}`,
+      type: selectedType,
+      basePrice,
+      fruit: selectedFruit,
+      freeComplements: selectedComplements,
+      adicionais: selectedAdicionaisItems,
       quantity: 1,
       totalPrice,
     });
 
     toast({
       title: 'Adicionado ao carrinho!',
-      description: `${selectedSize.label} foi adicionado ao seu carrinho.`,
+      description: `${selectedSize.label} ${selectedType === 'trufado' ? 'Trufado' : 'Tradicional'} foi adicionado.`,
     });
 
     onClose();
@@ -85,94 +98,97 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModa
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-card-foreground">
-            Personalize seu {selectedSize.label}
+            {selectedSize.label} — {selectedType === 'trufado' ? 'Trufado' : 'Tradicional'}
           </DialogTitle>
+          <p className="text-primary font-semibold text-lg">
+            R$ {basePrice.toFixed(2).replace('.', ',')}
+          </p>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Free Complements */}
+          {/* Fruit selection */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-3">
-              Complementos Gratuitos{' '}
+              Fruta <span className="text-muted-foreground font-normal">(escolha 1)</span>
+            </h3>
+            <div className="grid grid-cols-3 gap-2">
+              {fruits.map((fruit) => (
+                <div
+                  key={fruit}
+                  className={`flex items-center justify-center p-3 rounded-lg border cursor-pointer transition-colors ${
+                    selectedFruit === fruit
+                      ? 'bg-primary/10 border-primary'
+                      : 'bg-background border-border hover:border-primary/50'
+                  }`}
+                  onClick={() => setSelectedFruit(fruit)}
+                >
+                  <Label className="cursor-pointer text-card-foreground text-center">{fruit}</Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Complements */}
+          <div>
+            <h3 className="font-semibold text-card-foreground mb-1">
+              Complementos{' '}
               <span className="text-muted-foreground font-normal">
-                (escolha até 3) - {selectedFreeComplements.length}/3
+                (escolha até 2) — {selectedComplements.length}/2
               </span>
             </h3>
+            <p className="text-xs text-muted-foreground mb-3">Leite condensado já incluso</p>
             <div className="grid grid-cols-2 gap-2">
               {freeComplements.map((complement) => (
                 <div
                   key={complement}
                   className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedFreeComplements.includes(complement)
-                      ? 'bg-purple-50 border-primary'
-                      : 'bg-white border-border hover:border-primary/50'
+                    selectedComplements.includes(complement)
+                      ? 'bg-primary/10 border-primary'
+                      : 'bg-background border-border hover:border-primary/50'
                   }`}
-                  onClick={() => toggleFreeComplement(complement)}
+                  onClick={() => toggleComplement(complement)}
                 >
                   <Checkbox
-                    checked={selectedFreeComplements.includes(complement)}
-                    onCheckedChange={() => toggleFreeComplement(complement)}
+                    checked={selectedComplements.includes(complement)}
+                    onCheckedChange={() => toggleComplement(complement)}
                   />
-                  <Label className="cursor-pointer text-card-foreground">{complement}</Label>
+                  <Label className="cursor-pointer text-card-foreground text-sm">{complement}</Label>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Paid Complements */}
+          {/* Adicionais */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-3">
-              Complementos Pagos{' '}
-              <span className="text-primary font-normal">(+R$ 2,00 cada)</span>
+              Adicionais <span className="text-muted-foreground font-normal">(opcional)</span>
             </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {paidComplements.map((complement) => (
+            <div className="space-y-2">
+              {adicionais.map((adicional) => (
                 <div
-                  key={complement.name}
-                  className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedPaidComplements.includes(complement.name)
-                      ? 'bg-purple-50 border-primary'
-                      : 'bg-white border-border hover:border-primary/50'
+                  key={adicional.name}
+                  className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                    selectedAdicionais.includes(adicional.name)
+                      ? 'bg-primary/10 border-primary'
+                      : 'bg-background border-border hover:border-primary/50'
                   }`}
-                  onClick={() => togglePaidComplement(complement.name)}
+                  onClick={() => toggleAdicional(adicional.name)}
                 >
-                  <Checkbox
-                    checked={selectedPaidComplements.includes(complement.name)}
-                    onCheckedChange={() => togglePaidComplement(complement.name)}
-                  />
-                  <Label className="cursor-pointer text-card-foreground">{complement.name}</Label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Sauces */}
-          <div>
-            <h3 className="font-semibold text-card-foreground mb-3">
-              Calda{' '}
-              <span className="text-muted-foreground font-normal">(escolha 1 grátis)</span>
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {sauces.map((sauce) => (
-                <div
-                  key={sauce}
-                  className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedSauce === sauce
-                      ? 'bg-purple-50 border-primary'
-                      : 'bg-white border-border hover:border-primary/50'
-                  }`}
-                  onClick={() => setSelectedSauce(sauce)}
-                >
-                  <div
-                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                      selectedSauce === sauce ? 'border-primary' : 'border-border'
-                    }`}
-                  >
-                    {selectedSauce === sauce && (
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                    )}
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={selectedAdicionais.includes(adicional.name)}
+                      onCheckedChange={() => toggleAdicional(adicional.name)}
+                    />
+                    <div>
+                      <Label className="cursor-pointer text-card-foreground">{adicional.name}</Label>
+                      {adicional.description && (
+                        <p className="text-xs text-muted-foreground">{adicional.description}</p>
+                      )}
+                    </div>
                   </div>
-                  <Label className="cursor-pointer text-card-foreground">{sauce}</Label>
+                  <span className="text-primary font-semibold text-sm">
+                    +R$ {adicional.price.toFixed(2).replace('.', ',')}
+                  </span>
                 </div>
               ))}
             </div>
@@ -188,7 +204,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize }: CustomizationModa
             </div>
             <Button
               onClick={handleAddToCart}
-              className="w-full bg-primary text-primary-foreground py-4 rounded-lg font-semibold hover:bg-purple-700 transition-colors text-lg"
+              className="w-full py-4 rounded-lg font-semibold text-lg"
             >
               Adicionar ao Carrinho
             </Button>
