@@ -150,7 +150,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: Cus
                 >
                   <Checkbox
                     checked={selectedComplements.includes(complement)}
-                    onCheckedChange={() => toggleComplement(complement)}
+                    onCheckedChange={() => {}}
+                    onClick={(e) => e.stopPropagation()}
                   />
                   <Label className="cursor-pointer text-card-foreground text-sm">{complement}</Label>
                 </div>
@@ -177,7 +178,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: Cus
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       checked={selectedAdicionais.includes(adicional.name)}
-                      onCheckedChange={() => toggleAdicional(adicional.name)}
+                      onCheckedChange={() => {}}
+                      onClick={(e) => e.stopPropagation()}
                     />
                     <div>
                       <Label className="cursor-pointer text-card-foreground">{adicional.name}</Label>
