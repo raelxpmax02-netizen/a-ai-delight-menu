@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { AcaiSize, AcaiType, fruits, freeComplements, adicionais } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
@@ -39,6 +38,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
 
   const basePrice = selectedType === 'trufado' ? selectedSize.priceTrufado : selectedSize.priceTradicional;
 
+  // Só o div pai controla o toggle — o Checkbox é visual apenas (onCheckedChange vazio + stopPropagation)
   const toggleComplement = (complement: string) => {
     if (selectedComplements.includes(complement)) {
       setSelectedComplements(prev => prev.filter(c => c !== complement));
@@ -54,11 +54,9 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
   };
 
   const toggleAdicional = (name: string) => {
-    if (selectedAdicionais.includes(name)) {
-      setSelectedAdicionais(prev => prev.filter(a => a !== name));
-    } else {
-      setSelectedAdicionais(prev => [...prev, name]);
-    }
+    setSelectedAdicionais(prev =>
+      prev.includes(name) ? prev.filter(a => a !== name) : [...prev, name]
+    );
   };
 
   const adicionaisTotal = selectedAdicionais.reduce((sum, name) => {
@@ -100,34 +98,34 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[95vw] max-w-lg max-h-[85vh] overflow-y-auto rounded-xl p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-card-foreground">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-card-foreground">
             {selectedSize.label} — {selectedType === 'trufado' ? 'Trufado' : 'Tradicional'}
           </DialogTitle>
-          <p className="text-primary font-semibold text-lg">
+          <p className="text-primary font-semibold text-base sm:text-lg">
             R$ {basePrice.toFixed(2).replace('.', ',')}
           </p>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="space-y-5 py-2">
           {/* Fruit selection */}
           <div>
-            <h3 className="font-semibold text-card-foreground mb-3">
+            <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
               Fruta <span className="text-muted-foreground font-normal">(escolha 1)</span>
             </h3>
             <div className="grid grid-cols-3 gap-2">
               {fruits.map((fruit) => (
                 <div
                   key={fruit}
-                  className={`flex items-center justify-center p-3 rounded-lg border cursor-pointer transition-colors ${
+                  className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedFruit === fruit
                       ? 'bg-primary/10 border-primary'
                       : 'bg-background border-border hover:border-primary/50'
                   }`}
                   onClick={() => setSelectedFruit(fruit)}
                 >
-                  <Label className="cursor-pointer text-card-foreground text-center">{fruit}</Label>
+                  <span className="text-card-foreground text-center text-xs sm:text-sm font-medium">{fruit}</span>
                 </div>
               ))}
             </div>
@@ -135,18 +133,18 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
 
           {/* Complements */}
           <div>
-            <h3 className="font-semibold text-card-foreground mb-1">
+            <h3 className="font-semibold text-card-foreground mb-1 text-sm sm:text-base">
               Complementos{' '}
               <span className="text-muted-foreground font-normal">
-                (escolha até 2) — {selectedComplements.length}/2
+                (até 2) — {selectedComplements.length}/2
               </span>
             </h3>
-            <p className="text-xs text-muted-foreground mb-3">Leite condensado já incluso</p>
+            <p className="text-xs text-muted-foreground mb-2">Leite condensado já incluso</p>
             <div className="grid grid-cols-2 gap-2">
               {freeComplements.map((complement) => (
                 <div
                   key={complement}
-                  className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
+                  className={`flex items-center space-x-2 p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedComplements.includes(complement)
                       ? 'bg-primary/10 border-primary'
                       : 'bg-background border-border hover:border-primary/50'
@@ -155,9 +153,10 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
                 >
                   <Checkbox
                     checked={selectedComplements.includes(complement)}
-                    onCheckedChange={() => toggleComplement(complement)}
+                    onCheckedChange={() => {}}
+                    onClick={(e) => e.stopPropagation()}
                   />
-                  <Label className="cursor-pointer text-card-foreground text-sm pointer-events-none">{complement}</Label>
+                  <span className="text-card-foreground text-xs sm:text-sm pointer-events-none">{complement}</span>
                 </div>
               ))}
             </div>
@@ -165,14 +164,14 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
 
           {/* Adicionais */}
           <div>
-            <h3 className="font-semibold text-card-foreground mb-3">
+            <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
               Adicionais <span className="text-muted-foreground font-normal">(opcional)</span>
             </h3>
             <div className="space-y-2">
               {adicionais.map((adicional) => (
                 <div
                   key={adicional.name}
-                  className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                  className={`flex items-center justify-between p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedAdicionais.includes(adicional.name)
                       ? 'bg-primary/10 border-primary'
                       : 'bg-background border-border hover:border-primary/50'
@@ -182,16 +181,17 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       checked={selectedAdicionais.includes(adicional.name)}
-                      onCheckedChange={() => toggleAdicional(adicional.name)}
+                      onCheckedChange={() => {}}
+                      onClick={(e) => e.stopPropagation()}
                     />
                     <div>
-                      <Label className="cursor-pointer text-card-foreground pointer-events-none">{adicional.name}</Label>
+                      <span className="text-card-foreground text-xs sm:text-sm font-medium pointer-events-none">{adicional.name}</span>
                       {adicional.description && (
                         <p className="text-xs text-muted-foreground">{adicional.description}</p>
                       )}
                     </div>
                   </div>
-                  <span className="text-primary font-semibold text-sm">
+                  <span className="text-primary font-semibold text-xs sm:text-sm shrink-0 ml-2">
                     +R$ {adicional.price.toFixed(2).replace('.', ',')}
                   </span>
                 </div>
@@ -201,15 +201,15 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
 
           {/* Total and Add to Cart */}
           <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-card-foreground">Total:</span>
-              <span className="text-2xl font-bold text-primary">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-base sm:text-lg font-semibold text-card-foreground">Total:</span>
+              <span className="text-xl sm:text-2xl font-bold text-primary">
                 R$ {totalPrice.toFixed(2).replace('.', ',')}
               </span>
             </div>
             <Button
               onClick={handleAddToCart}
-              className="w-full py-4 rounded-lg font-semibold text-lg"
+              className="w-full py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg"
             >
               Adicionar ao Carrinho
             </Button>
