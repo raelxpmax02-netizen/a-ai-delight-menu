@@ -4,7 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import CustomizationModal from './CustomizationModal';
 
-const MenuSection = () => {
+interface MenuSectionProps {
+  onNavigate?: (section: string) => void;
+}
+
+const MenuSection = ({ onNavigate }: MenuSectionProps) => {
   const [selectedSize, setSelectedSize] = useState<AcaiSize | null>(null);
   const [selectedType, setSelectedType] = useState<AcaiType>('tradicional');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,22 +59,24 @@ const MenuSection = () => {
                   <div className="p-4 font-bold text-card-foreground flex items-center justify-center text-lg">
                     {size.size}
                   </div>
-                  <div className="p-4 flex items-center justify-center border-l border-border">
+                  <div className="p-4 flex items-center justify-center gap-2 border-l border-border">
+                    <span className="font-bold text-lg text-primary">R${size.priceTradicional.toFixed(0)}</span>
                     <Button
                       onClick={() => handleCustomize(size, 'tradicional')}
-                      variant="outline"
-                      className="font-bold text-lg text-primary border-primary hover:bg-primary hover:text-primary-foreground transition-colors px-6"
+                      size="sm"
+                      className="text-xs px-3 h-8"
                     >
-                      R${size.priceTradicional.toFixed(0)}
+                      Personalizar
                     </Button>
                   </div>
-                  <div className="p-4 flex items-center justify-center border-l border-border">
+                  <div className="p-4 flex items-center justify-center gap-2 border-l border-border">
+                    <span className="font-bold text-lg text-primary">R${size.priceTrufado.toFixed(0)}</span>
                     <Button
                       onClick={() => handleCustomize(size, 'trufado')}
-                      variant="outline"
-                      className="font-bold text-lg text-primary border-primary hover:bg-primary hover:text-primary-foreground transition-colors px-6"
+                      size="sm"
+                      className="text-xs px-3 h-8"
                     >
-                      R${size.priceTrufado.toFixed(0)}
+                      Personalizar
                     </Button>
                   </div>
                 </div>
@@ -110,6 +116,10 @@ const MenuSection = () => {
         onClose={() => setIsModalOpen(false)}
         selectedSize={selectedSize}
         selectedType={selectedType}
+        onAddedToCart={() => {
+          setIsModalOpen(false);
+          onNavigate?.('carrinho');
+        }}
       />
     </section>
   );

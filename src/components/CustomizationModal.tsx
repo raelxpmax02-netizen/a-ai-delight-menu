@@ -17,9 +17,10 @@ interface CustomizationModalProps {
   onClose: () => void;
   selectedSize: AcaiSize | null;
   selectedType: AcaiType;
+  onAddedToCart?: () => void;
 }
 
-const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: CustomizationModalProps) => {
+const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAddedToCart }: CustomizationModalProps) => {
   const [selectedFruit, setSelectedFruit] = useState<string>('');
   const [selectedComplements, setSelectedComplements] = useState<string[]>([]);
   const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
@@ -90,7 +91,11 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: Cus
       description: `${selectedSize.label} ${selectedType === 'trufado' ? 'Trufado' : 'Tradicional'} foi adicionado.`,
     });
 
-    onClose();
+    if (onAddedToCart) {
+      onAddedToCart();
+    } else {
+      onClose();
+    }
   };
 
   return (
@@ -150,10 +155,9 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: Cus
                 >
                   <Checkbox
                     checked={selectedComplements.includes(complement)}
-                    onCheckedChange={() => {}}
-                    onClick={(e) => e.stopPropagation()}
+                    onCheckedChange={() => toggleComplement(complement)}
                   />
-                  <Label className="cursor-pointer text-card-foreground text-sm">{complement}</Label>
+                  <Label className="cursor-pointer text-card-foreground text-sm pointer-events-none">{complement}</Label>
                 </div>
               ))}
             </div>
@@ -178,11 +182,10 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType }: Cus
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       checked={selectedAdicionais.includes(adicional.name)}
-                      onCheckedChange={() => {}}
-                      onClick={(e) => e.stopPropagation()}
+                      onCheckedChange={() => toggleAdicional(adicional.name)}
                     />
                     <div>
-                      <Label className="cursor-pointer text-card-foreground">{adicional.name}</Label>
+                      <Label className="cursor-pointer text-card-foreground pointer-events-none">{adicional.name}</Label>
                       {adicional.description && (
                         <p className="text-xs text-muted-foreground">{adicional.description}</p>
                       )}

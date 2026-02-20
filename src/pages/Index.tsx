@@ -61,7 +61,7 @@ const Index = () => {
       </div>
       
       <div ref={sectionRefs.cardapio}>
-        <MenuSection />
+        <MenuSection onNavigate={scrollToSection} />
       </div>
       
       <div ref={sectionRefs.carrinho}>
