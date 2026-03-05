@@ -38,15 +38,15 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             <CardContent className="p-0">
               {/* Header */}
               <div className="grid grid-cols-3 bg-primary text-primary-foreground">
-                <div className="p-4 font-bold text-lg flex items-center justify-center">
+                <div className="p-2 sm:p-4 font-bold text-sm sm:text-lg flex items-center justify-center">
                   TAMANHOS
                 </div>
-                <div className="p-4 font-bold text-lg text-center border-l border-primary-foreground/20">
+                <div className="p-2 sm:p-4 font-bold text-sm sm:text-lg text-center border-l border-primary-foreground/20">
                   Tradicional
                 </div>
-                <div className="p-4 font-bold text-lg text-center border-l border-primary-foreground/20">
+                <div className="p-2 sm:p-4 font-bold text-sm sm:text-lg text-center border-l border-primary-foreground/20">
                   <div>Trufado</div>
-                  <p className="text-xs font-normal opacity-80 mt-1">creme de avelã • creme de ninho</p>
+                  <p className="text-[10px] sm:text-xs font-normal opacity-80 mt-1 hidden sm:block">creme de avelã • creme de ninho</p>
                 </div>
               </div>
 
@@ -56,25 +56,25 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                   key={size.id}
                   className={`grid grid-cols-3 ${index % 2 === 0 ? 'bg-muted/50' : 'bg-background'}`}
                 >
-                  <div className="p-4 font-bold text-card-foreground flex items-center justify-center text-lg">
+                  <div className="p-2 sm:p-4 font-bold text-card-foreground flex items-center justify-center text-base sm:text-lg">
                     {size.size}
                   </div>
-                  <div className="p-4 flex items-center justify-center gap-2 border-l border-border">
-                    <span className="font-bold text-lg text-primary">R${size.priceTradicional.toFixed(0)}</span>
+                  <div className="p-2 sm:p-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-l border-border">
+                    <span className="font-bold text-base sm:text-lg text-primary">R${size.priceTradicional.toFixed(0)}</span>
                     <Button
                       onClick={() => handleCustomize(size, 'tradicional')}
                       size="sm"
-                      className="text-xs px-3 h-8"
+                      className="text-[10px] sm:text-xs px-2 sm:px-3 h-6 sm:h-8"
                     >
                       Personalizar
                     </Button>
                   </div>
-                  <div className="p-4 flex items-center justify-center gap-2 border-l border-border">
-                    <span className="font-bold text-lg text-primary">R${size.priceTrufado.toFixed(0)}</span>
+                  <div className="p-2 sm:p-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-l border-border">
+                    <span className="font-bold text-base sm:text-lg text-primary">R${size.priceTrufado.toFixed(0)}</span>
                     <Button
                       onClick={() => handleCustomize(size, 'trufado')}
                       size="sm"
-                      className="text-xs px-3 h-8"
+                      className="text-[10px] sm:text-xs px-2 sm:px-3 h-6 sm:h-8"
                     >
                       Personalizar
                     </Button>
