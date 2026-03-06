@@ -37,7 +37,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
     );
   }
 
-  const handleSendWhatsApp = () => {
+  const handleSendWhatsApp = async () => {
     if (!name.trim()) {
       toast({ title: 'Nome obrigatório', description: 'Por favor, informe seu nome.', variant: 'destructive' });
       return;
