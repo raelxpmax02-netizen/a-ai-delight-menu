@@ -14,6 +14,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
   const [selectedSize, setSelectedSize] = useState<AcaiSize | null>(null);
   const [selectedType, setSelectedType] = useState<AcaiType>('tradicional');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isStatsOpen, setIsStatsOpen] = useState(false);
 
   const handleCustomize = (size: AcaiSize, type: AcaiType) => {
     setSelectedSize(size);
