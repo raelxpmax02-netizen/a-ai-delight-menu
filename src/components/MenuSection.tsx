@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { BarChart3 } from 'lucide-react';
 import CustomizationModal from './CustomizationModal';
+import OrderStatsModal from './OrderStatsModal';
 
 interface MenuSectionProps {
   onNavigate?: (section: string) => void;
