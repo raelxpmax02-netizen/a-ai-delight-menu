@@ -135,6 +135,10 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
           onNavigate?.('carrinho');
         }}
       />
+      <OrderStatsModal
+        isOpen={isStatsOpen}
+        onClose={() => setIsStatsOpen(false)}
+      />
     </section>
   );
 };
