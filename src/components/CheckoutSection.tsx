@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { WHATSAPP_NUMBER, STORE_NAME } from '@/data/products';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -36,7 +37,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
     );
   }
 
-  const handleSendWhatsApp = () => {
+  const handleSendWhatsApp = async () => {
     if (!name.trim()) {
       toast({ title: 'Nome obrigatório', description: 'Por favor, informe seu nome.', variant: 'destructive' });
       return;
@@ -85,6 +86,15 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+
+    // Save order to database
+    await supabase.from('orders').insert({
+      customer_name: name.trim(),
+      items_count: items.reduce((sum, item) => sum + item.quantity, 0),
+      total_price: totalPrice,
+      delivery_type: deliveryType,
+      payment_method: paymentMethod,
+    });
 
     toast({ title: 'Pedido enviado!', description: 'Seu pedido foi enviado para o WhatsApp.' });
     clearCart();
