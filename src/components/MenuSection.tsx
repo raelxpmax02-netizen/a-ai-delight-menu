@@ -26,7 +26,18 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
     <section id="cardapio" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <p className="text-primary font-medium mb-2">• monte o seu •</p>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <p className="text-primary font-medium">• monte o seu •</p>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsStatsOpen(true)}
+              className="text-muted-foreground hover:text-primary"
+              title="Relatório de pedidos"
+            >
+              <BarChart3 className="w-5 h-5" />
+            </Button>
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">
             AÇAÍ
           </h2>
