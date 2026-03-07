@@ -56,11 +56,17 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                         <span className="font-medium">Fruta:</span> {item.fruit}
                       </p>
                     )}
+                    <p className="text-sm text-muted-foreground mb-1">
+                      <span className="font-medium">Leite condensado:</span> {item.leiteCondensado ? 'Sim' : 'Não'}
+                    </p>
                     {item.freeComplements.length > 0 && (
                       <p className="text-sm text-muted-foreground mb-1">
                         <span className="font-medium">Complementos:</span> {item.freeComplements.join(', ')}
                       </p>
                     )}
+                    <p className="text-sm text-muted-foreground mb-1">
+                      <span className="font-medium">Talher:</span> {item.querTalher ? 'Sim' : 'Não'}
+                    </p>
                     {item.adicionais.length > 0 && (
                       <p className="text-sm text-muted-foreground mb-1">
                         <span className="font-medium">Adicionais:</span>{' '}

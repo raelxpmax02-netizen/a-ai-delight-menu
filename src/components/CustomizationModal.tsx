@@ -23,6 +23,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
   const [selectedFruit, setSelectedFruit] = useState<string>('');
   const [selectedComplements, setSelectedComplements] = useState<string[]>([]);
   const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
+  const [leiteCondensado, setLeiteCondensado] = useState<boolean | null>(null);
+  const [querTalher, setQuerTalher] = useState<boolean | null>(null);
   const { addItem } = useCart();
   const { toast } = useToast();
 
@@ -31,6 +33,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
       setSelectedFruit('');
       setSelectedComplements([]);
       setSelectedAdicionais([]);
+      setLeiteCondensado(null);
+      setQuerTalher(null);
     }
   }, [isOpen]);
 
@@ -38,7 +42,6 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
 
   const basePrice = selectedType === 'trufado' ? selectedSize.priceTrufado : selectedSize.priceTradicional;
 
-  // Só o div pai controla o toggle — o Checkbox é visual apenas (onCheckedChange vazio + stopPropagation)
   const toggleComplement = (complement: string) => {
     if (selectedComplements.includes(complement)) {
       setSelectedComplements(prev => prev.filter(c => c !== complement));
@@ -67,6 +70,15 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
   const totalPrice = basePrice + adicionaisTotal;
 
   const handleAddToCart = () => {
+    if (leiteCondensado === null) {
+      toast({ title: 'Leite condensado', description: 'Por favor, escolha se deseja leite condensado.', variant: 'destructive' });
+      return;
+    }
+    if (querTalher === null) {
+      toast({ title: 'Talher', description: 'Por favor, escolha se deseja talher.', variant: 'destructive' });
+      return;
+    }
+
     const selectedAdicionaisItems = selectedAdicionais.map(name => {
       const item = adicionais.find(a => a.name === name)!;
       return { name: item.name, price: item.price };
@@ -80,6 +92,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
       fruit: selectedFruit,
       freeComplements: selectedComplements,
       adicionais: selectedAdicionaisItems,
+      leiteCondensado,
+      querTalher,
       quantity: 1,
       totalPrice,
     });
@@ -131,6 +145,35 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
             </div>
           </div>
 
+          {/* Leite Condensado */}
+          <div>
+            <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
+              Leite Condensado
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              <div
+                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                  leiteCondensado === true
+                    ? 'bg-primary/10 border-primary'
+                    : 'bg-background border-border hover:border-primary/50'
+                }`}
+                onClick={() => setLeiteCondensado(true)}
+              >
+                <span className="text-card-foreground text-xs sm:text-sm font-medium">Sim, por favor 🥛</span>
+              </div>
+              <div
+                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                  leiteCondensado === false
+                    ? 'bg-primary/10 border-primary'
+                    : 'bg-background border-border hover:border-primary/50'
+                }`}
+                onClick={() => setLeiteCondensado(false)}
+              >
+                <span className="text-card-foreground text-xs sm:text-sm font-medium">Não, obrigado</span>
+              </div>
+            </div>
+          </div>
+
           {/* Complements */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-1 text-sm sm:text-base">
@@ -139,7 +182,6 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
                 (até 2) — {selectedComplements.length}/2
               </span>
             </h3>
-            <p className="text-xs text-muted-foreground mb-2">Leite condensado já incluso</p>
             <div className="grid grid-cols-2 gap-2">
               {freeComplements.map((complement) => (
                 <div
@@ -162,10 +204,39 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
             </div>
           </div>
 
+          {/* Talher */}
+          <div>
+            <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
+              Deseja talher?
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              <div
+                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                  querTalher === true
+                    ? 'bg-primary/10 border-primary'
+                    : 'bg-background border-border hover:border-primary/50'
+                }`}
+                onClick={() => setQuerTalher(true)}
+              >
+                <span className="text-card-foreground text-xs sm:text-sm font-medium">Sim, por favor 🥄</span>
+              </div>
+              <div
+                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                  querTalher === false
+                    ? 'bg-primary/10 border-primary'
+                    : 'bg-background border-border hover:border-primary/50'
+                }`}
+                onClick={() => setQuerTalher(false)}
+              >
+                <span className="text-card-foreground text-xs sm:text-sm font-medium">Não, obrigado</span>
+              </div>
+            </div>
+          </div>
+
           {/* Adicionais */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
-              Adicionais <span className="text-muted-foreground font-normal">(opcional)</span>
+              Adicionais <span className="text-muted-foreground font-normal">(opcional — R$5,00 cada)</span>
             </h3>
             <div className="space-y-2">
               {adicionais.map((adicional) => (

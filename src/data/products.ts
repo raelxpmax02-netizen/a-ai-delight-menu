@@ -6,6 +6,10 @@ export interface AcaiSize {
   size: string;
   priceTradicional: number;
   priceTrufado: number;
+  promoTradicional?: number;
+  promoTrufado?: number;
+  originalTradicional?: number;
+  originalTrufado?: number;
   image: string;
   description: string;
 }
@@ -15,8 +19,10 @@ export const acaiSizes: AcaiSize[] = [
     id: '300ml',
     label: 'Açaí 300ml',
     size: '300ml',
-    priceTradicional: 12.00,
-    priceTrufado: 15.00,
+    originalTradicional: 17.99,
+    priceTradicional: 14.39,
+    originalTrufado: 22.49,
+    priceTrufado: 17.99,
     description: 'Perfeito para um lanche rápido',
     image: '/assets/foto_01.jpg',
   },
@@ -24,8 +30,10 @@ export const acaiSizes: AcaiSize[] = [
     id: '400ml',
     label: 'Açaí 400ml',
     size: '400ml',
-    priceTradicional: 16.00,
-    priceTrufado: 20.00,
+    originalTradicional: 29.99,
+    priceTradicional: 19.99,
+    originalTrufado: 24.99,
+    priceTrufado: 19.99,
     description: 'Tamanho ideal para matar a fome',
     image: '/assets/foto_04.jpg',
   },
@@ -33,8 +41,10 @@ export const acaiSizes: AcaiSize[] = [
     id: '500ml',
     label: 'Açaí 500ml',
     size: '500ml',
-    priceTradicional: 19.00,
-    priceTrufado: 25.00,
+    originalTradicional: 31.99,
+    priceTradicional: 25.99,
+    originalTrufado: 39.99,
+    priceTrufado: 31.99,
     description: 'Para quem ama açaí',
     image: '/assets/foto_03.jpg',
   },
@@ -55,9 +65,9 @@ export const freeComplements = [
 ];
 
 export const adicionais = [
-  { name: 'Adicional complemento', price: 4.00, description: 'Fruta e adicionais tradicionais' },
-  { name: 'Adicional Gourmet', price: 6.00, description: 'Creme de avelã, Creme de ninho e Ao leite' },
-  { name: 'Adicional Nutella', price: 7.00, description: '' },
+  { name: 'Adicional complemento', price: 5.00, description: 'Fruta e adicionais tradicionais' },
+  { name: 'Adicional Gourmet', price: 5.00, description: 'Creme de avelã, Creme de ninho e Ao leite' },
+  { name: 'Adicional Nutella', price: 5.00, description: '' },
 ];
 
 // Keep for backward compatibility but no longer used in new menu
