@@ -71,9 +71,11 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
       if (item.fruit) {
         message += `   🍌 Fruta: ${item.fruit}\n`;
       }
+      message += `   🥛 Leite condensado: ${item.leiteCondensado ? 'Sim' : 'Não'}\n`;
       if (item.freeComplements.length > 0) {
         message += `   ✓ Complementos: ${item.freeComplements.join(', ')}\n`;
       }
+      message += `   🥄 Talher: ${item.querTalher ? 'Sim' : 'Não'}\n`;
       if (item.adicionais.length > 0) {
         message += `   ✓ Adicionais: ${item.adicionais.map(a => `${a.name} (+R$${a.price.toFixed(2).replace('.', ',')})`).join(', ')}\n`;
       }
