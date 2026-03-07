@@ -22,6 +22,19 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
     setIsModalOpen(true);
   };
 
+  const renderPrice = (original: number | undefined, current: number) => {
+    if (original && original > current) {
+      return (
+        <div className="flex flex-col items-center">
+          <span className="text-xs text-muted-foreground line-through">R${original.toFixed(2).replace('.', ',')}</span>
+          <span className="font-bold text-base sm:text-lg text-primary">R${current.toFixed(2).replace('.', ',')}</span>
+          <span className="text-[9px] sm:text-[10px] font-semibold text-green-600 bg-green-100 px-1 rounded">20% OFF</span>
+        </div>
+      );
+    }
+    return <span className="font-bold text-base sm:text-lg text-primary">R${current.toFixed(2).replace('.', ',')}</span>;
+  };
+
   return (
     <section id="cardapio" className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -44,6 +57,9 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Escolha o tamanho e a modalidade ideal para você
           </p>
+          <div className="inline-block mt-3 bg-green-100 text-green-700 font-bold px-4 py-2 rounded-full text-sm animate-pulse">
+            🔥 PROMOÇÃO DO DIA — 20% OFF em todos os tamanhos!
+          </div>
         </div>
 
         {/* Pricing Table */}
@@ -73,8 +89,8 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                   <div className="p-2 sm:p-4 font-bold text-card-foreground flex items-center justify-center text-base sm:text-lg">
                     {size.size}
                   </div>
-                  <div className="p-2 sm:p-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-l border-border">
-                    <span className="font-bold text-base sm:text-lg text-primary">R${size.priceTradicional.toFixed(0)}</span>
+                  <div className="p-2 sm:p-4 flex flex-col items-center justify-center gap-1 sm:gap-2 border-l border-border">
+                    {renderPrice(size.originalTradicional, size.priceTradicional)}
                     <Button
                       onClick={() => handleCustomize(size, 'tradicional')}
                       size="sm"
@@ -83,8 +99,8 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                       Personalizar
                     </Button>
                   </div>
-                  <div className="p-2 sm:p-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 border-l border-border">
-                    <span className="font-bold text-base sm:text-lg text-primary">R${size.priceTrufado.toFixed(0)}</span>
+                  <div className="p-2 sm:p-4 flex flex-col items-center justify-center gap-1 sm:gap-2 border-l border-border">
+                    {renderPrice(size.originalTrufado, size.priceTrufado)}
                     <Button
                       onClick={() => handleCustomize(size, 'trufado')}
                       size="sm"
@@ -113,12 +129,22 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
               <CardContent className="p-4 text-center">
                 <h3 className="text-lg font-bold text-card-foreground">{size.size}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{size.description}</p>
-                <p className="text-sm text-card-foreground">
-                  <span className="font-semibold text-primary">R${size.priceTradicional.toFixed(0)}</span>
-                  <span className="text-muted-foreground mx-2">|</span>
-                  <span className="font-semibold text-primary">R${size.priceTrufado.toFixed(0)}</span>
-                  <span className="text-xs text-muted-foreground ml-1">trufado</span>
-                </p>
+                <div className="flex items-center justify-center gap-3">
+                  <div className="text-center">
+                    {size.originalTradicional && (
+                      <span className="text-xs text-muted-foreground line-through block">R${size.originalTradicional.toFixed(2).replace('.', ',')}</span>
+                    )}
+                    <span className="font-semibold text-primary">R${size.priceTradicional.toFixed(2).replace('.', ',')}</span>
+                  </div>
+                  <span className="text-muted-foreground">|</span>
+                  <div className="text-center">
+                    {size.originalTrufado && (
+                      <span className="text-xs text-muted-foreground line-through block">R${size.originalTrufado.toFixed(2).replace('.', ',')}</span>
+                    )}
+                    <span className="font-semibold text-primary">R${size.priceTrufado.toFixed(2).replace('.', ',')}</span>
+                    <span className="text-xs text-muted-foreground ml-1">trufado</span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
