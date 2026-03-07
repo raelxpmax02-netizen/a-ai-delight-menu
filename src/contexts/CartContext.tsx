@@ -10,6 +10,8 @@ export interface CartItem {
   fruit: string;
   freeComplements: string[];
   adicionais: { name: string; price: number }[];
+  leiteCondensado: boolean;
+  querTalher: boolean;
   quantity: number;
   totalPrice: number;
 }
