@@ -150,20 +150,20 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
                 <Label className="text-card-foreground font-medium block mb-3">Forma de Pagamento *</Label>
                 <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-2 gap-3">
                   {['Dinheiro', 'Pix', 'Cartão de Crédito', 'Cartão de Débito'].map((method) => (
-                    <div
+                    <label
                       key={method}
+                      htmlFor={`pay-${method}`}
                       className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${paymentMethod === method ? 'bg-primary/10 border-primary' : 'border-border hover:border-primary/50'}`}
-                      onClick={() => setPaymentMethod(method)}
                     >
-                      <RadioGroupItem value={method} id={method} />
-                      <Label htmlFor={method} className="cursor-pointer text-card-foreground text-sm">
+                      <RadioGroupItem value={method} id={`pay-${method}`} />
+                      <span className="cursor-pointer text-card-foreground text-sm">
                         {method === 'Dinheiro' && '💵 '}
                         {method === 'Pix' && '📱 '}
                         {method === 'Cartão de Crédito' && '💳 '}
                         {method === 'Cartão de Débito' && '💳 '}
                         {method}
-                      </Label>
-                    </div>
+                      </span>
+                    </label>
                   ))}
                 </RadioGroup>
               </div>
