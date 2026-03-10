@@ -126,16 +126,14 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
               <div>
                 <Label className="text-card-foreground font-medium block mb-3">Entrega ou Retirada? *</Label>
                 <RadioGroup value={deliveryType} onValueChange={setDeliveryType} className="flex gap-4">
-                  <div className={`flex-1 flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${deliveryType === 'entrega' ? 'bg-primary/10 border-primary' : 'border-border hover:border-primary/50'}`}
-                    onClick={() => setDeliveryType('entrega')}>
+                  <label htmlFor="entrega" className={`flex-1 flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${deliveryType === 'entrega' ? 'bg-primary/10 border-primary' : 'border-border hover:border-primary/50'}`}>
                     <RadioGroupItem value="entrega" id="entrega" />
-                    <Label htmlFor="entrega" className="cursor-pointer font-medium text-card-foreground">🛵 Entrega em casa</Label>
-                  </div>
-                  <div className={`flex-1 flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${deliveryType === 'retirada' ? 'bg-primary/10 border-primary' : 'border-border hover:border-primary/50'}`}
-                    onClick={() => setDeliveryType('retirada')}>
+                    <span className="cursor-pointer font-medium text-card-foreground">🛵 Entrega em casa</span>
+                  </label>
+                  <label htmlFor="retirada" className={`flex-1 flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${deliveryType === 'retirada' ? 'bg-primary/10 border-primary' : 'border-border hover:border-primary/50'}`}>
                     <RadioGroupItem value="retirada" id="retirada" />
-                    <Label htmlFor="retirada" className="cursor-pointer font-medium text-card-foreground">🏪 Retirar no local</Label>
-                  </div>
+                    <span className="cursor-pointer font-medium text-card-foreground">🏪 Retirar no local</span>
+                  </label>
                 </RadioGroup>
               </div>
 
@@ -152,20 +150,20 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
                 <Label className="text-card-foreground font-medium block mb-3">Forma de Pagamento *</Label>
                 <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-2 gap-3">
                   {['Dinheiro', 'Pix', 'Cartão de Crédito', 'Cartão de Débito'].map((method) => (
-                    <div
+                    <label
                       key={method}
+                      htmlFor={`pay-${method}`}
                       className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${paymentMethod === method ? 'bg-primary/10 border-primary' : 'border-border hover:border-primary/50'}`}
-                      onClick={() => setPaymentMethod(method)}
                     >
-                      <RadioGroupItem value={method} id={method} />
-                      <Label htmlFor={method} className="cursor-pointer text-card-foreground text-sm">
+                      <RadioGroupItem value={method} id={`pay-${method}`} />
+                      <span className="cursor-pointer text-card-foreground text-sm">
                         {method === 'Dinheiro' && '💵 '}
                         {method === 'Pix' && '📱 '}
                         {method === 'Cartão de Crédito' && '💳 '}
                         {method === 'Cartão de Débito' && '💳 '}
                         {method}
-                      </Label>
-                    </div>
+                      </span>
+                    </label>
                   ))}
                 </RadioGroup>
               </div>
