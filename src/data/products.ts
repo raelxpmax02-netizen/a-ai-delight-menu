@@ -21,8 +21,7 @@ export const acaiSizes: AcaiSize[] = [
     size: '300ml',
     originalTradicional: 17.99,
     priceTradicional: 14.39,
-    originalTrufado: 22.49,
-    priceTrufado: 17.99,
+    priceTrufado: 22.00,
     description: 'Perfeito para um lanche rápido',
     image: '/assets/foto_01.jpg',
   },
@@ -30,10 +29,9 @@ export const acaiSizes: AcaiSize[] = [
     id: '400ml',
     label: 'Açaí 400ml',
     size: '400ml',
-    originalTradicional: 29.99,
+    originalTradicional: 24.99,
     priceTradicional: 19.99,
-    originalTrufado: 24.99,
-    priceTrufado: 19.99,
+    priceTrufado: 28.00,
     description: 'Tamanho ideal para matar a fome',
     image: '/assets/foto_04.jpg',
   },
@@ -42,7 +40,7 @@ export const acaiSizes: AcaiSize[] = [
     label: 'Açaí 500ml',
     size: '500ml',
     originalTradicional: 31.99,
-    priceTradicional: 25.99,
+    priceTradicional: 25.59,
     originalTrufado: 39.99,
     priceTrufado: 31.99,
     description: 'Para quem ama açaí',
@@ -65,9 +63,22 @@ export const freeComplements = [
 ];
 
 export const adicionais = [
-  { name: 'Adicional complemento', price: 5.00, description: 'Fruta e adicionais tradicionais' },
-  { name: 'Adicional Gourmet', price: 5.00, description: 'Creme de avelã, Creme de ninho e Ao leite' },
-  { name: 'Adicional Nutella', price: 5.00, description: '' },
+  { name: 'Nutella', price: 12.00, description: '', popular: true },
+  { name: 'Morango', price: 5.00, description: '' },
+  { name: 'Banana', price: 5.00, description: '' },
+  { name: 'Leite em Pó', price: 5.00, description: '' },
+  { name: 'Granola', price: 5.00, description: '' },
+  { name: 'Sucrilhos', price: 5.00, description: '' },
+  { name: 'Amendoim', price: 5.00, description: '' },
+  { name: 'Paçoca', price: 5.00, description: '' },
+  { name: 'Confete', price: 5.00, description: '' },
+  { name: 'Chocobol', price: 5.00, description: '' },
+  { name: 'Ovomaltine', price: 5.00, description: '' },
+  { name: 'Creme de Leite em Pó', price: 8.00, description: '' },
+  { name: 'Creme de Avelã', price: 8.00, description: '' },
+  { name: 'Cobertura Fini Beijos (Morango)', price: 5.00, description: '' },
+  { name: 'Cobertura Fini Dentaduras (Framboesa)', price: 5.00, description: '' },
+  { name: 'Cobertura Fini Bananas', price: 5.00, description: '' },
 ];
 
 // Keep for backward compatibility but no longer used in new menu
@@ -85,6 +96,8 @@ export const sauces = [
   'Caramelo',
   'Leite condensado',
 ];
+
+export const trufadoCremes = ['Creme de Avelã', 'Creme de Leite em Pó'];
 
 export const WHATSAPP_NUMBER = '5511977069676';
 export const INSTAGRAM_URL = 'https://www.instagram.com/mariah.acaiteria/';
