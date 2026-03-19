@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { STORE_NAME } from '@/data/products';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, CalendarDays, CalendarRange, Calendar, TrendingUp, ShoppingBag, DollarSign } from 'lucide-react';
+import { ArrowLeft, CalendarDays, CalendarRange, Calendar, TrendingUp, ShoppingBag, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface OrderStats {
   today: number;
@@ -25,6 +27,7 @@ const Admin = () => {
   });
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   const fetchStats = async () => {
     setLoading(true);
@@ -40,24 +43,45 @@ const Admin = () => {
       .order('created_at', { ascending: false });
 
     if (allOrders) {
-      const todayOrders = allOrders.filter(o => o.created_at >= startOfDay);
-      const weekOrders = allOrders.filter(o => o.created_at >= startOfWeek);
+      // Only count confirmed orders for stats
+      const confirmedOrders = allOrders.filter(o => o.status === 'confirmado');
+      const todayConfirmed = confirmedOrders.filter(o => o.created_at >= startOfDay);
+      const weekConfirmed = confirmedOrders.filter(o => o.created_at >= startOfWeek);
 
       setStats({
-        today: todayOrders.length,
-        week: weekOrders.length,
-        month: allOrders.length,
-        todayRevenue: todayOrders.reduce((s, o) => s + Number(o.total_price), 0),
-        weekRevenue: weekOrders.reduce((s, o) => s + Number(o.total_price), 0),
-        monthRevenue: allOrders.reduce((s, o) => s + Number(o.total_price), 0),
-        todayItems: todayOrders.reduce((s, o) => s + o.items_count, 0),
-        weekItems: weekOrders.reduce((s, o) => s + o.items_count, 0),
-        monthItems: allOrders.reduce((s, o) => s + o.items_count, 0),
+        today: todayConfirmed.length,
+        week: weekConfirmed.length,
+        month: confirmedOrders.length,
+        todayRevenue: todayConfirmed.reduce((s, o) => s + Number(o.total_price), 0),
+        weekRevenue: weekConfirmed.reduce((s, o) => s + Number(o.total_price), 0),
+        monthRevenue: confirmedOrders.reduce((s, o) => s + Number(o.total_price), 0),
+        todayItems: todayConfirmed.reduce((s, o) => s + o.items_count, 0),
+        weekItems: weekConfirmed.reduce((s, o) => s + o.items_count, 0),
+        monthItems: confirmedOrders.reduce((s, o) => s + o.items_count, 0),
       });
 
-      setRecentOrders(allOrders.slice(0, 10));
+      setRecentOrders(allOrders.slice(0, 20));
     }
     setLoading(false);
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: newStatus } as any)
+      .eq('id', orderId);
+
+    if (error) {
+      toast({ title: 'Erro', description: 'Não foi possível atualizar o pedido.', variant: 'destructive' });
+      return;
+    }
+
+    toast({
+      title: newStatus === 'confirmado' ? '✅ Pedido confirmado!' : '❌ Pedido cancelado',
+      description: newStatus === 'confirmado' ? 'O pedido agora conta nas estatísticas.' : 'O pedido foi removido das estatísticas.',
+    });
+
+    fetchStats();
   };
 
   useEffect(() => {
@@ -73,6 +97,20 @@ const Admin = () => {
     const d = new Date(dateStr);
     return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'confirmado':
+        return <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-green-100 text-green-700"><CheckCircle className="w-3 h-3" /> Confirmado</span>;
+      case 'cancelado':
+        return <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-red-100 text-red-700"><XCircle className="w-3 h-3" /> Cancelado</span>;
+      default:
+        return <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700"><Clock className="w-3 h-3" /> Pendente</span>;
+    }
+  };
+
+  const pendingOrders = recentOrders.filter(o => !o.status || o.status === 'pendente');
+  const otherOrders = recentOrders.filter(o => o.status && o.status !== 'pendente');
 
   const statCards = [
     { label: 'Pedidos Hoje', value: stats.today, icon: CalendarDays, color: 'text-green-600', bg: 'bg-green-50' },
@@ -122,10 +160,55 @@ const Admin = () => {
               ))}
             </div>
 
-            {/* Recent Orders */}
+            {/* Pending Orders */}
+            {pendingOrders.length > 0 && (
+              <Card className="border-2 border-yellow-300">
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-bold text-card-foreground mb-1 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-yellow-600" />
+                    Pedidos Pendentes ({pendingOrders.length})
+                  </h2>
+                  <p className="text-sm text-muted-foreground mb-4">Confirme quando o cliente enviar a mensagem no WhatsApp</p>
+                  <div className="space-y-3">
+                    {pendingOrders.map((order) => (
+                      <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-lg bg-yellow-50 border border-yellow-200">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-card-foreground">{order.customer_name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {formatDate(order.created_at)} • {order.items_count} itens • {formatCurrency(Number(order.total_price))}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {order.delivery_type === 'entrega' ? '🛵 Entrega' : '🏪 Retirada'} • {order.payment_method}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 shrink-0">
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            onClick={() => updateOrderStatus(order.id, 'confirmado')}
+                          >
+                            <CheckCircle className="w-4 h-4 mr-1" /> Confirmar
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-red-300 text-red-600 hover:bg-red-50"
+                            onClick={() => updateOrderStatus(order.id, 'cancelado')}
+                          >
+                            <XCircle className="w-4 h-4 mr-1" /> Cancelar
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* All Orders */}
             <Card className="border border-border">
               <CardContent className="p-6">
-                <h2 className="text-lg font-bold text-card-foreground mb-4">Últimos Pedidos</h2>
+                <h2 className="text-lg font-bold text-card-foreground mb-4">Histórico de Pedidos</h2>
                 {recentOrders.length === 0 ? (
                   <p className="text-muted-foreground text-center py-8">Nenhum pedido registrado ainda.</p>
                 ) : (
@@ -136,9 +219,10 @@ const Admin = () => {
                           <th className="text-left py-3 px-2">Cliente</th>
                           <th className="text-left py-3 px-2">Data</th>
                           <th className="text-center py-3 px-2">Itens</th>
+                          <th className="text-left py-3 px-2">Status</th>
                           <th className="text-left py-3 px-2">Tipo</th>
-                          <th className="text-left py-3 px-2">Pagamento</th>
                           <th className="text-right py-3 px-2">Total</th>
+                          <th className="text-center py-3 px-2">Ações</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -147,13 +231,33 @@ const Admin = () => {
                             <td className="py-3 px-2 font-medium text-card-foreground">{order.customer_name}</td>
                             <td className="py-3 px-2 text-muted-foreground">{formatDate(order.created_at)}</td>
                             <td className="py-3 px-2 text-center text-card-foreground">{order.items_count}</td>
+                            <td className="py-3 px-2">{getStatusBadge(order.status || 'pendente')}</td>
                             <td className="py-3 px-2">
                               <span className={`text-xs px-2 py-1 rounded-full ${order.delivery_type === 'entrega' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
                                 {order.delivery_type === 'entrega' ? '🛵 Entrega' : '🏪 Retirada'}
                               </span>
                             </td>
-                            <td className="py-3 px-2 text-muted-foreground">{order.payment_method}</td>
                             <td className="py-3 px-2 text-right font-bold text-primary">{formatCurrency(Number(order.total_price))}</td>
+                            <td className="py-3 px-2 text-center">
+                              {(!order.status || order.status === 'pendente') && (
+                                <div className="flex gap-1 justify-center">
+                                  <button
+                                    onClick={() => updateOrderStatus(order.id, 'confirmado')}
+                                    className="p-1 rounded hover:bg-green-100 text-green-600 transition-colors"
+                                    title="Confirmar"
+                                  >
+                                    <CheckCircle className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => updateOrderStatus(order.id, 'cancelado')}
+                                    className="p-1 rounded hover:bg-red-100 text-red-600 transition-colors"
+                                    title="Cancelar"
+                                  >
+                                    <XCircle className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
