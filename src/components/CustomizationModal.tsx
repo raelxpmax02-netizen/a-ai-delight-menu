@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { AcaiSize, AcaiType, fruits, freeComplements, adicionais } from '@/data/products';
+import { AcaiSize, AcaiType, fruits, freeComplements, adicionais, trufadoCremes } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,6 +25,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
   const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
   const [leiteCondensado, setLeiteCondensado] = useState<boolean | null>(null);
   const [querTalher, setQuerTalher] = useState<boolean | null>(null);
+  const [cremeTrufado, setCremeTrufado] = useState<string>('');
   const { addItem } = useCart();
   const { toast } = useToast();
 
@@ -35,6 +36,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
       setSelectedAdicionais([]);
       setLeiteCondensado(null);
       setQuerTalher(null);
+      setCremeTrufado('');
     }
   }, [isOpen]);
 
@@ -70,6 +72,10 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
   const totalPrice = basePrice + adicionaisTotal;
 
   const handleAddToCart = () => {
+    if (selectedType === 'trufado' && !cremeTrufado) {
+      toast({ title: 'Creme trufado', description: 'Por favor, escolha o creme do seu açaí trufado.', variant: 'destructive' });
+      return;
+    }
     if (leiteCondensado === null) {
       toast({ title: 'Leite condensado', description: 'Por favor, escolha se deseja leite condensado.', variant: 'destructive' });
       return;
@@ -94,6 +100,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
       adicionais: selectedAdicionaisItems,
       leiteCondensado,
       querTalher,
+      cremeTrufado: selectedType === 'trufado' ? cremeTrufado : undefined,
       quantity: 1,
       totalPrice,
     });
@@ -123,6 +130,30 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
         </DialogHeader>
 
         <div className="space-y-5 py-2">
+          {/* Trufado Cream Selection */}
+          {selectedType === 'trufado' && (
+            <div>
+              <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
+                Escolha o creme trufado <span className="text-destructive">*</span>
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {trufadoCremes.map((creme) => (
+                  <div
+                    key={creme}
+                    className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                      cremeTrufado === creme
+                        ? 'bg-primary/10 border-primary'
+                        : 'bg-background border-border hover:border-primary/50'
+                    }`}
+                    onClick={() => setCremeTrufado(creme)}
+                  >
+                    <span className="text-card-foreground text-center text-xs sm:text-sm font-medium">{creme}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Fruit selection */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
@@ -236,7 +267,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
           {/* Adicionais */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
-              Adicionais <span className="text-muted-foreground font-normal">(opcional — R$5,00 cada)</span>
+              Adicionais <span className="text-muted-foreground font-normal">(opcional)</span>
             </h3>
             <div className="space-y-2">
               {adicionais.map((adicional) => (
@@ -256,10 +287,12 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
                       onClick={(e) => e.stopPropagation()}
                     />
                     <div>
-                      <span className="text-card-foreground text-xs sm:text-sm font-medium pointer-events-none">{adicional.name}</span>
-                      {adicional.description && (
-                        <p className="text-xs text-muted-foreground">{adicional.description}</p>
-                      )}
+                      <span className="text-card-foreground text-xs sm:text-sm font-medium pointer-events-none">
+                        {adicional.name}
+                        {'popular' in adicional && adicional.popular && (
+                          <span className="ml-2 text-[10px] text-amber-600 font-semibold">🔥 Popular</span>
+                        )}
+                      </span>
                     </div>
                   </div>
                   <span className="text-primary font-semibold text-xs sm:text-sm shrink-0 ml-2">

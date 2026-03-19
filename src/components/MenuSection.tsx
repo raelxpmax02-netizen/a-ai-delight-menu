@@ -58,7 +58,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             Escolha o tamanho e a modalidade ideal para você
           </p>
           <div className="inline-block mt-3 bg-green-100 text-green-700 font-bold px-4 py-2 rounded-full text-sm animate-pulse">
-            🔥 PROMOÇÃO DO DIA — 20% OFF em todos os tamanhos!
+            🔥 PROMOÇÃO — Confira os descontos especiais!
           </div>
         </div>
 

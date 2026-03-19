@@ -51,6 +51,11 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                 <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-card-foreground mb-2">{item.sizeLabel}</h3>
+                    {item.cremeTrufado && (
+                      <p className="text-sm text-muted-foreground mb-1">
+                        <span className="font-medium">Creme:</span> {item.cremeTrufado}
+                      </p>
+                    )}
                     {item.fruit && (
                       <p className="text-sm text-muted-foreground mb-1">
                         <span className="font-medium">Fruta:</span> {item.fruit}
