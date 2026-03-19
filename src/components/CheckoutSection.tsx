@@ -68,6 +68,9 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
 
     items.forEach((item, index) => {
       message += `*${index + 1}. ${item.sizeLabel}* (x${item.quantity})\n`;
+      if (item.cremeTrufado) {
+        message += `   🍫 Creme: ${item.cremeTrufado}\n`;
+      }
       if (item.fruit) {
         message += `   🍌 Fruta: ${item.fruit}\n`;
       }
