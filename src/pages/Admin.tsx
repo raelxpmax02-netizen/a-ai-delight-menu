@@ -44,7 +44,7 @@ const Admin = () => {
 
     if (allOrders) {
       // Only count confirmed orders for stats
-      const confirmedOrders = allOrders.filter(o => o.status === 'confirmado');
+      const confirmedOrders = allOrders.filter(o => (o as any).status === 'confirmado');
       const todayConfirmed = confirmedOrders.filter(o => o.created_at >= startOfDay);
       const weekConfirmed = confirmedOrders.filter(o => o.created_at >= startOfWeek);
 
