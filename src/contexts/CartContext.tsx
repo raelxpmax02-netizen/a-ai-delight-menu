@@ -12,6 +12,7 @@ export interface CartItem {
   adicionais: { name: string; price: number }[];
   leiteCondensado: boolean;
   querTalher: boolean;
+  cremeTrufado?: string;
   quantity: number;
   totalPrice: number;
 }
