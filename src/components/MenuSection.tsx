@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,7 +34,12 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
     <section id="cardapio" className="py-8 sm:py-12 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-6 sm:mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between mb-6 sm:mb-8"
+        >
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="w-4 h-4 text-primary" />
@@ -52,10 +58,15 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             <BarChart3 className="w-4 h-4" />
             <span className="hidden sm:inline">Relatório</span>
           </Button>
-        </div>
+        </motion.div>
 
         {/* Promo Banner */}
-        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 flex items-center gap-3">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 flex items-center gap-3"
+        >
           <div className="bg-primary/15 rounded-lg p-2 shrink-0">
             <span className="text-lg">🔥</span>
           </div>
@@ -63,12 +74,19 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             <p className="text-sm font-semibold text-card-foreground">Promoção do dia!</p>
             <p className="text-xs text-muted-foreground">Descontos especiais em tamanhos selecionados</p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Product Cards */}
         <div className="space-y-4">
-          {acaiSizes.map((size) => (
-            <Card key={size.id} className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors">
+          {acaiSizes.map((size, index) => (
+            <motion.div
+              key={size.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+              whileHover={{ scale: 1.01 }}
+            >
+            <Card className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors">
               <CardContent className="p-0">
                 {/* Size Header */}
                 <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-muted/80 to-transparent border-b border-border/40">
@@ -152,6 +170,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                 </div>
               </CardContent>
             </Card>
+            </motion.div>
           ))}
         </div>
       </div>
