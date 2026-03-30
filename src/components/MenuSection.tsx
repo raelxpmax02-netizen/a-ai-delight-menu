@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, Sparkles, ChevronRight } from 'lucide-react';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
 
@@ -22,127 +22,132 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
     setIsModalOpen(true);
   };
 
-  const renderPrice = (original: number | undefined, current: number) => {
+  const getDiscount = (original: number | undefined, current: number) => {
     if (original && original > current) {
-      return (
-        <div className="flex flex-col items-center">
-          <span className="text-xs text-muted-foreground line-through">R${original.toFixed(2).replace('.', ',')}</span>
-          <span className="font-bold text-base sm:text-lg text-primary">R${current.toFixed(2).replace('.', ',')}</span>
-          <span className="text-[9px] sm:text-[10px] font-semibold text-green-600 bg-green-100 px-1 rounded">20% OFF</span>
-        </div>
-      );
+      return Math.round(((original - current) / original) * 100);
     }
-    return <span className="font-bold text-base sm:text-lg text-primary">R${current.toFixed(2).replace('.', ',')}</span>;
+    return 0;
   };
 
   return (
-    <section id="cardapio" className="py-20 bg-background">
+    <section id="cardapio" className="py-8 sm:py-12 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <p className="text-primary font-medium">• monte o seu •</p>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsStatsOpen(true)}
-              className="text-muted-foreground hover:text-primary"
-              title="Relatório de pedidos"
-            >
-              <BarChart3 className="w-5 h-5" />
-            </Button>
+        {/* Section Header */}
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider">Monte o seu</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">
+              Cardápio
+            </h2>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">
-            AÇAÍ
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Escolha o tamanho e a modalidade ideal para você
-          </p>
-          <div className="inline-block mt-3 bg-green-100 text-green-700 font-bold px-4 py-2 rounded-full text-sm animate-pulse">
-            🔥 PROMOÇÃO — Confira os descontos especiais!
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsStatsOpen(true)}
+            className="text-muted-foreground hover:text-primary gap-1.5"
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span className="hidden sm:inline">Relatório</span>
+          </Button>
+        </div>
+
+        {/* Promo Banner */}
+        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 flex items-center gap-3">
+          <div className="bg-primary/15 rounded-lg p-2 shrink-0">
+            <span className="text-lg">🔥</span>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-card-foreground">Promoção do dia!</p>
+            <p className="text-xs text-muted-foreground">Descontos especiais em tamanhos selecionados</p>
           </div>
         </div>
 
-        {/* Pricing Table */}
-        <div className="max-w-3xl mx-auto mb-12">
-          <Card className="overflow-hidden border-primary/20">
-            <CardContent className="p-0">
-              {/* Header */}
-              <div className="grid grid-cols-3 bg-primary text-primary-foreground">
-                <div className="p-2 sm:p-4 font-bold text-sm sm:text-lg flex items-center justify-center">
-                  TAMANHOS
-                </div>
-                <div className="p-2 sm:p-4 font-bold text-sm sm:text-lg text-center border-l border-primary-foreground/20">
-                  Tradicional
-                </div>
-                <div className="p-2 sm:p-4 font-bold text-sm sm:text-lg text-center border-l border-primary-foreground/20">
-                  <div>Trufado</div>
-                  <p className="text-[10px] sm:text-xs font-normal opacity-80 mt-1 hidden sm:block">creme de avelã • creme de ninho</p>
-                </div>
-              </div>
-
-              {/* Rows */}
-              {acaiSizes.map((size, index) => (
-                <div
-                  key={size.id}
-                  className={`grid grid-cols-3 ${index % 2 === 0 ? 'bg-muted/50' : 'bg-background'}`}
-                >
-                  <div className="p-2 sm:p-4 font-bold text-card-foreground flex items-center justify-center text-base sm:text-lg">
-                    {size.size}
-                  </div>
-                  <div className="p-2 sm:p-4 flex flex-col items-center justify-center gap-1 sm:gap-2 border-l border-border">
-                    {renderPrice(size.originalTradicional, size.priceTradicional)}
-                    <Button
-                      onClick={() => handleCustomize(size, 'tradicional')}
-                      size="sm"
-                      className="text-[10px] sm:text-xs px-2 sm:px-3 h-6 sm:h-8"
-                    >
-                      Personalizar
-                    </Button>
-                  </div>
-                  <div className="p-2 sm:p-4 flex flex-col items-center justify-center gap-1 sm:gap-2 border-l border-border">
-                    {renderPrice(size.originalTrufado, size.priceTrufado)}
-                    <Button
-                      onClick={() => handleCustomize(size, 'trufado')}
-                      size="sm"
-                      className="text-[10px] sm:text-xs px-2 sm:px-3 h-6 sm:h-8"
-                    >
-                      Personalizar
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Size Cards with images */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {/* Product Cards */}
+        <div className="space-y-4">
           {acaiSizes.map((size) => (
-            <Card key={size.id} className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:scale-105 border border-border">
-              <div className="w-full h-48 bg-muted">
-                <img
-                  alt={size.label}
-                  className="w-full h-full object-cover object-top"
-                  src={size.image}
-                />
-              </div>
-              <CardContent className="p-4 text-center">
-                <h3 className="text-lg font-bold text-card-foreground">{size.size}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{size.description}</p>
-                <div className="flex items-center justify-center gap-3">
-                  <div className="text-center">
-                    {size.originalTradicional && (
-                      <span className="text-xs text-muted-foreground line-through block">R${size.originalTradicional.toFixed(2).replace('.', ',')}</span>
-                    )}
-                    <span className="font-semibold text-primary">R${size.priceTradicional.toFixed(2).replace('.', ',')}</span>
+            <Card key={size.id} className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors">
+              <CardContent className="p-0">
+                {/* Size Header */}
+                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-muted/80 to-transparent border-b border-border/40">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                    <img
+                      alt={size.label}
+                      className="w-full h-full object-cover"
+                      src={size.image}
+                    />
                   </div>
-                  <span className="text-muted-foreground">|</span>
-                  <div className="text-center">
-                    {size.originalTrufado && (
-                      <span className="text-xs text-muted-foreground line-through block">R${size.originalTrufado.toFixed(2).replace('.', ',')}</span>
-                    )}
-                    <span className="font-semibold text-primary">R${size.priceTrufado.toFixed(2).replace('.', ',')}</span>
-                    <span className="text-xs text-muted-foreground ml-1">trufado</span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg sm:text-xl font-bold text-card-foreground">{size.size}</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{size.description}</p>
+                  </div>
+                </div>
+
+                {/* Type Options */}
+                <div className="divide-y divide-border/40">
+                  {/* Tradicional */}
+                  <div
+                    className="flex items-center justify-between p-3 sm:p-4 cursor-pointer hover:bg-muted/30 transition-colors group"
+                    onClick={() => handleCustomize(size, 'tradicional')}
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm sm:text-base font-semibold text-card-foreground">Tradicional</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                      <div className="text-right">
+                        {size.originalTradicional && size.originalTradicional > size.priceTradicional && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-muted-foreground line-through">
+                              R${size.originalTradicional.toFixed(2).replace('.', ',')}
+                            </span>
+                            <span className="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">
+                              -{getDiscount(size.originalTradicional, size.priceTradicional)}%
+                            </span>
+                          </div>
+                        )}
+                        <span className="font-bold text-base sm:text-lg text-primary">
+                          R${size.priceTradicional.toFixed(2).replace('.', ',')}
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Trufado */}
+                  <div
+                    className="flex items-center justify-between p-3 sm:p-4 cursor-pointer hover:bg-muted/30 transition-colors group"
+                    onClick={() => handleCustomize(size, 'trufado')}
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm sm:text-base font-semibold text-card-foreground">Trufado</p>
+                        <p className="text-[10px] sm:text-xs text-muted-foreground">creme de avelã • creme de ninho</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                      <div className="text-right">
+                        {size.originalTrufado && size.originalTrufado > size.priceTrufado && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-muted-foreground line-through">
+                              R${size.originalTrufado.toFixed(2).replace('.', ',')}
+                            </span>
+                            <span className="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">
+                              -{getDiscount(size.originalTrufado, size.priceTrufado)}%
+                            </span>
+                          </div>
+                        )}
+                        <span className="font-bold text-base sm:text-lg text-primary">
+                          R${size.priceTrufado.toFixed(2).replace('.', ',')}
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
                   </div>
                 </div>
               </CardContent>
