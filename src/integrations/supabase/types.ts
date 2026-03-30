@@ -22,6 +22,7 @@ export type Database = {
           id: string
           items_count: number
           payment_method: string
+          status: string
           total_price: number
         }
         Insert: {
@@ -31,6 +32,7 @@ export type Database = {
           id?: string
           items_count?: number
           payment_method: string
+          status?: string
           total_price: number
         }
         Update: {
@@ -40,6 +42,7 @@ export type Database = {
           id?: string
           items_count?: number
           payment_method?: string
+          status?: string
           total_price?: number
         }
         Relationships: []

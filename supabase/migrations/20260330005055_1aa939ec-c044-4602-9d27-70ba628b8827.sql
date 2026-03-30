@@ -1,0 +1,1 @@
+CREATE POLICY "Anyone can update orders" ON public.orders FOR UPDATE TO public USING (true) WITH CHECK (true);
