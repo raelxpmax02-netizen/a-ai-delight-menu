@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, Utensils } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import { STORE_NAME } from '@/data/products';
-import logoImage from '@/assets/logo.jpg';
 
 interface HeaderProps {
   onNavigate: (section: string) => void;
@@ -41,17 +39,15 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
             className="flex items-center gap-2.5 cursor-pointer"
             onClick={() => onNavigate('cardapio')}
           >
-            <img
-              alt={STORE_NAME}
-              className="h-8 w-8 object-cover rounded-full"
-              src={logoImage}
-            />
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isScrolled ? 'bg-primary/10' : 'bg-white/10'}`}>
+              <Utensils className={`w-4 h-4 ${isScrolled ? 'text-primary' : 'text-white'}`} />
+            </div>
             <span
               className={`text-lg font-bold transition-colors ${
                 isScrolled ? 'text-card-foreground' : 'text-white'
               }`}
             >
-              {STORE_NAME}
+              Cardápio Digital
             </span>
           </div>
 
