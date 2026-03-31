@@ -98,7 +98,7 @@ export const sauces = [
 
 export const trufadoCremes = ['Creme de Avelã', 'Creme de Leite em Pó'];
 
-export const WHATSAPP_NUMBER = '5511999999999';
+export const WHATSAPP_NUMBER = '5511933651215';
 
 export const STORE_NAME = 'Sua Açaíteria';
 
