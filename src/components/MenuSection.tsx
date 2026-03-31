@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarChart3, Sparkles, ChevronRight } from 'lucide-react';
+import { BarChart3, Sparkles } from 'lucide-react';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
 
