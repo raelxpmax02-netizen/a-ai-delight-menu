@@ -104,6 +104,14 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
         </div>
 
         <div className="max-w-2xl mx-auto space-y-6">
+          {isEmpty && (
+            <Card className="rounded-xl shadow-md border border-border bg-muted/50">
+              <CardContent className="p-6 text-center">
+                <p className="text-muted-foreground mb-3">Seu carrinho está vazio. Adicione itens no cardápio para finalizar.</p>
+                <Button variant="outline" onClick={() => onNavigate('cardapio')}>Ver Cardápio</Button>
+              </CardContent>
+            </Card>
+          )}
           <Card className="rounded-xl shadow-md border border-border">
             <CardContent className="p-6 space-y-6">
               <div>
