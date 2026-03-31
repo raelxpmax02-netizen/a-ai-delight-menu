@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
+import { acaiSizes, AcaiSize, AcaiType, extraProducts } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BarChart3, Sparkles } from 'lucide-react';
@@ -177,6 +177,65 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             </motion.div>
           ))}
         </div>
+
+        {/* Extra Products by Category */}
+        {Object.entries(
+          extraProducts.reduce((acc, p) => {
+            if (!acc[p.category]) acc[p.category] = [];
+            acc[p.category].push(p);
+            return acc;
+          }, {} as Record<string, typeof extraProducts>)
+        ).map(([category, products], catIndex) => (
+          <div key={category} className="mt-8">
+            <motion.h3
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.5 + catIndex * 0.1 }}
+              className="text-xl font-bold text-card-foreground mb-4 flex items-center gap-2"
+            >
+              <span className="w-1.5 h-6 bg-primary rounded-full" />
+              {category}
+            </motion.h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {products.map((product, idx) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.6 + idx * 0.1 }}
+                  whileHover={{ scale: 1.01 }}
+                >
+                  <Card className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors">
+                    <CardContent className="p-3 sm:p-4 flex items-center gap-3">
+                      <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                        <img alt={product.name} className="w-full h-full object-cover" src={product.image} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-semibold text-card-foreground truncate">{product.name}</p>
+                          {product.popular && (
+                            <span className="text-[10px] text-amber-600 font-semibold shrink-0">🔥</span>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">{product.description}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        {product.originalPrice && (
+                          <span className="text-xs text-muted-foreground line-through block">
+                            R${product.originalPrice.toFixed(2).replace('.', ',')}
+                          </span>
+                        )}
+                        <span className="font-bold text-primary">
+                          R${product.price.toFixed(2).replace('.', ',')}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       <CustomizationModal
