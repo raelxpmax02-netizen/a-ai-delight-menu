@@ -81,7 +81,6 @@ export const adicionais = [
   { name: 'Cobertura Fini Bananas', price: 5.00, description: '' },
 ];
 
-// Keep for backward compatibility but no longer used in new menu
 export const paidComplements = [
   { name: 'Leite Ninho', price: 2.00 },
   { name: 'Nutella', price: 2.00 },
@@ -99,30 +98,29 @@ export const sauces = [
 
 export const trufadoCremes = ['Creme de Avelã', 'Creme de Leite em Pó'];
 
-export const WHATSAPP_NUMBER = '5511977069676';
-export const INSTAGRAM_URL = 'https://www.instagram.com/mariah.acaiteria/';
+export const WHATSAPP_NUMBER = '5511999999999';
 
-export const STORE_NAME = 'Mariah Açaíteria';
+export const STORE_NAME = 'Sua Açaíteria';
 
-export const STORE_DESCRIPTION = 'Na nossa açaíteria você encontra açaí cremoso, fresquinho e montado do jeitinho que você gosta. Trabalhamos com ingredientes de qualidade, opções simples e caprichadas, além de um atendimento acolhedor que faz você se sentir em casa.';
+export const STORE_DESCRIPTION = 'Um cardápio digital completo, moderno e personalizado para a sua açaíteria. Sistema de pedidos integrado via WhatsApp, personalização de açaí, controle de pedidos e relatórios — tudo em um só lugar.';
 
-export const STORE_DESCRIPTION_2 = 'Temos açaí no copo, transferências especiais, frutas, coberturas variadas e aquele sabor que dá vontade de voltar sempre. Cada detalhe é preparado com amor para entregar uma experiência gostosa e leve a qualquer hora do dia.';
+export const STORE_DESCRIPTION_2 = 'Aumente suas vendas com um cardápio profissional que seus clientes vão amar. Fácil de usar, responsivo para celular e pronto para impulsionar o seu negócio.';
 
 export const STORE_ADDRESS = {
-  street: 'R. Santa Maria do Salto, 217',
-  neighborhood: 'Parque das Nações',
-  city: 'Guarulhos - SP',
-  cep: 'CEP: 07243-540',
+  street: 'Seu endereço aqui',
+  neighborhood: 'Seu bairro',
+  city: 'Sua cidade - UF',
+  cep: 'CEP: 00000-000',
 };
 
 export const STORE_HOURS = [
-  { day: 'Segunda-feira', hours: 'Fechado' },
-  { day: 'Terça-feira', hours: '11:00 - 19:00' },
-  { day: 'Quarta-feira', hours: '11:00 - 19:00' },
-  { day: 'Quinta-feira', hours: '15:00 - 19:00' },
-  { day: 'Sexta-feira', hours: '11:30 - 20:00' },
-  { day: 'Sábado', hours: '12:30 - 19:00' },
-  { day: 'Domingo', hours: '12:00 - 17:00' },
+  { day: 'Segunda-feira', hours: '09:00 - 22:00' },
+  { day: 'Terça-feira', hours: '09:00 - 22:00' },
+  { day: 'Quarta-feira', hours: '09:00 - 22:00' },
+  { day: 'Quinta-feira', hours: '09:00 - 22:00' },
+  { day: 'Sexta-feira', hours: '09:00 - 23:00' },
+  { day: 'Sábado', hours: '10:00 - 23:00' },
+  { day: 'Domingo', hours: '10:00 - 20:00' },
 ];
 
-export const STORE_PHONE = '(11) 97706-9676';
+export const STORE_PHONE = '(00) 00000-0000';

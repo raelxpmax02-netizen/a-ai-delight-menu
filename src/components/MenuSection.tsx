@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarChart3, Sparkles, ChevronRight } from 'lucide-react';
+import { BarChart3, Sparkles } from 'lucide-react';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
 
@@ -132,7 +132,9 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                           R${size.priceTradicional.toFixed(2).replace('.', ',')}
                         </span>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full whitespace-nowrap">
+                        Personalizar
+                      </span>
                     </div>
                   </div>
 
@@ -164,7 +166,9 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                           R${size.priceTrufado.toFixed(2).replace('.', ',')}
                         </span>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full whitespace-nowrap">
+                        Personalizar
+                      </span>
                     </div>
                   </div>
                 </div>
