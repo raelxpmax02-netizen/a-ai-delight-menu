@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { acaiSizes, AcaiSize, AcaiType } from '@/data/products';
+import { acaiSizes, AcaiSize, AcaiType, extraProducts } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BarChart3, Sparkles } from 'lucide-react';
