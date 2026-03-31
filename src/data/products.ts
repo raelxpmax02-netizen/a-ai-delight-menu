@@ -48,6 +48,73 @@ export const acaiSizes: AcaiSize[] = [
   },
 ];
 
+// Produtos extras fictícios para demonstração
+export interface ExtraProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  category: string;
+  popular?: boolean;
+}
+
+export const extraProducts: ExtraProduct[] = [
+  {
+    id: 'milkshake-ovomaltine',
+    name: 'Milkshake de Ovomaltine',
+    description: 'Cremoso e irresistível, feito com Ovomaltine de verdade',
+    price: 18.90,
+    originalPrice: 22.90,
+    image: '/assets/foto_02.jpg',
+    category: 'Milkshakes',
+    popular: true,
+  },
+  {
+    id: 'milkshake-nutella',
+    name: 'Milkshake de Nutella',
+    description: 'Para os amantes de avelã, puro sabor',
+    price: 21.90,
+    image: '/assets/foto_02.jpg',
+    category: 'Milkshakes',
+  },
+  {
+    id: 'sorvete-1bola',
+    name: 'Sorvete 1 Bola',
+    description: 'Escolha seu sabor favorito',
+    price: 8.00,
+    image: '/assets/foto_03.jpg',
+    category: 'Sorvetes',
+  },
+  {
+    id: 'sorvete-2bolas',
+    name: 'Sorvete 2 Bolas',
+    description: 'Combine dois sabores incríveis',
+    price: 14.00,
+    originalPrice: 16.00,
+    image: '/assets/foto_03.jpg',
+    category: 'Sorvetes',
+    popular: true,
+  },
+  {
+    id: 'agua-coco',
+    name: 'Água de Coco',
+    description: 'Natural e refrescante',
+    price: 7.00,
+    image: '/assets/foto_01.jpg',
+    category: 'Bebidas',
+  },
+  {
+    id: 'suco-natural',
+    name: 'Suco Natural',
+    description: 'Laranja, morango ou maracujá',
+    price: 10.00,
+    image: '/assets/foto_01.jpg',
+    category: 'Bebidas',
+  },
+];
+
 export const fruits = ['Banana', 'Uva', 'Morango'];
 
 export const freeComplements = [
