@@ -21,21 +21,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
   const { items, totalPrice, clearCart } = useCart();
   const { toast } = useToast();
 
-  if (items.length === 0) {
-    return (
-      <section id="finalizar" className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4">Finalizar Pedido</h2>
-            <p className="text-lg text-muted-foreground">Seu carrinho está vazio. Adicione itens para finalizar.</p>
-          </div>
-          <div className="text-center">
-            <Button onClick={() => onNavigate('cardapio')}>Ver Cardápio</Button>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const isEmpty = items.length === 0;
 
   const handleSendWhatsApp = async () => {
     if (!name.trim()) {
