@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { acaiSizes, AcaiSize, AcaiType, extraProducts } from '@/data/products';
+import { pizzaFlavors, PizzaFlavor, extraProducts } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarChart3, Sparkles } from 'lucide-react';
+import { BarChart3, Sparkles, Flame } from 'lucide-react';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
 
@@ -12,16 +12,26 @@ interface MenuSectionProps {
 }
 
 const MenuSection = ({ onNavigate }: MenuSectionProps) => {
-  const [selectedSize, setSelectedSize] = useState<AcaiSize | null>(null);
-  const [selectedType, setSelectedType] = useState<AcaiType>('tradicional');
+  const [selectedFlavor, setSelectedFlavor] = useState<PizzaFlavor | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isStatsOpen, setIsStatsOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>('todas');
 
-  const handleCustomize = (size: AcaiSize, type: AcaiType) => {
-    setSelectedSize(size);
-    setSelectedType(type);
+  const handleCustomize = (flavor: PizzaFlavor) => {
+    setSelectedFlavor(flavor);
     setIsModalOpen(true);
   };
+
+  const categories = [
+    { id: 'todas', label: 'Todas' },
+    { id: 'tradicional', label: 'Tradicionais' },
+    { id: 'especial', label: 'Especiais' },
+    { id: 'premium', label: 'Premium' },
+  ];
+
+  const filteredFlavors = activeCategory === 'todas'
+    ? pizzaFlavors
+    : pizzaFlavors.filter(f => f.category === activeCategory);
 
   const getDiscount = (original: number | undefined, current: number) => {
     if (original && original > current) {
@@ -43,10 +53,10 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-xs font-semibold text-primary uppercase tracking-wider">Monte o seu</span>
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider">Escolha sua</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">
-              Cardápio
+              Pizzas 🍕
             </h2>
           </div>
           <Button
@@ -68,112 +78,97 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
           className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 flex items-center gap-3"
         >
           <div className="bg-primary/15 rounded-lg p-2 shrink-0">
-            <span className="text-lg">🔥</span>
+            <Flame className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-card-foreground">Promoção do dia!</p>
-            <p className="text-xs text-muted-foreground">Descontos especiais em tamanhos selecionados</p>
+            <p className="text-sm font-semibold text-card-foreground">🔥 Promoção do dia!</p>
+            <p className="text-xs text-muted-foreground">Descontos especiais em sabores selecionados</p>
           </div>
         </motion.div>
 
-        {/* Product Cards */}
-        <div className="space-y-4">
-          {acaiSizes.map((size, index) => (
+        {/* Category Filter */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.25 }}
+          className="flex gap-2 mb-6 overflow-x-auto pb-2"
+        >
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                activeCategory === cat.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Pizza Cards */}
+        <div className="space-y-3">
+          {filteredFlavors.map((flavor, index) => (
             <motion.div
-              key={size.id}
+              key={flavor.id}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+              transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
               whileHover={{ scale: 1.01 }}
             >
-            <Card className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors">
-              <CardContent className="p-0">
-                {/* Size Header */}
-                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-muted/80 to-transparent border-b border-border/40">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
-                    <img
-                      alt={size.label}
-                      className="w-full h-full object-cover"
-                      src={size.image}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-card-foreground">{size.size}</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground">{size.description}</p>
-                  </div>
-                </div>
-
-                {/* Type Options */}
-                <div className="divide-y divide-border/40">
-                  {/* Tradicional */}
-                  <div
-                    className="flex items-center justify-between p-3 sm:p-4 cursor-pointer hover:bg-muted/30 transition-colors group"
-                    onClick={() => handleCustomize(size, 'tradicional')}
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
-                      <div className="min-w-0">
-                        <p className="text-sm sm:text-base font-semibold text-card-foreground">Tradicional</p>
-                      </div>
+              <Card
+                className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors cursor-pointer"
+                onClick={() => handleCustomize(flavor)}
+              >
+                <CardContent className="p-0">
+                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                      <img
+                        alt={flavor.name}
+                        className="w-full h-full object-cover"
+                        src={flavor.image}
+                        loading="lazy"
+                      />
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                      <div className="text-right">
-                        {size.originalTradicional && size.originalTradicional > size.priceTradicional && (
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-muted-foreground line-through">
-                              R${size.originalTradicional.toFixed(2).replace('.', ',')}
-                            </span>
-                            <span className="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">
-                              -{getDiscount(size.originalTradicional, size.priceTradicional)}%
-                            </span>
-                          </div>
-                        )}
-                        <span className="font-bold text-base sm:text-lg text-primary">
-                          R${size.priceTradicional.toFixed(2).replace('.', ',')}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <h3 className="text-base sm:text-lg font-bold text-card-foreground truncate">{flavor.name}</h3>
+                        {flavor.popular && <span className="text-[10px] text-amber-600 font-semibold shrink-0">🔥</span>}
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
+                          flavor.category === 'premium' ? 'bg-amber-100 text-amber-700' :
+                          flavor.category === 'especial' ? 'bg-blue-100 text-blue-700' :
+                          'bg-muted text-muted-foreground'
+                        }`}>
+                          {flavor.category === 'premium' ? '⭐ Premium' : flavor.category === 'especial' ? 'Especial' : 'Tradicional'}
                         </span>
                       </div>
-                      <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full whitespace-nowrap">
-                        Personalizar
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Trufado */}
-                  <div
-                    className="flex items-center justify-between p-3 sm:p-4 cursor-pointer hover:bg-muted/30 transition-colors group"
-                    onClick={() => handleCustomize(size, 'trufado')}
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-                      <div className="min-w-0">
-                        <p className="text-sm sm:text-base font-semibold text-card-foreground">Trufado</p>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground">creme de avelã • creme de ninho</p>
+                      <p className="text-xs text-muted-foreground mb-1 line-clamp-1">{flavor.ingredients.join(' • ')}</p>
+                      <div className="flex items-center gap-2">
+                        <div>
+                          {flavor.originalPrices?.grande && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground line-through">
+                                R${flavor.originalPrices.grande.toFixed(2).replace('.', ',')}
+                              </span>
+                              <span className="text-[10px] font-bold text-green-600 bg-green-100 px-1 py-0.5 rounded">
+                                -{getDiscount(flavor.originalPrices.grande, flavor.prices.grande)}%
+                              </span>
+                            </div>
+                          )}
+                          <span className="font-bold text-primary text-sm sm:text-base">
+                            a partir de R${flavor.prices.broto.toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                      <div className="text-right">
-                        {size.originalTrufado && size.originalTrufado > size.priceTrufado && (
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-muted-foreground line-through">
-                              R${size.originalTrufado.toFixed(2).replace('.', ',')}
-                            </span>
-                            <span className="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">
-                              -{getDiscount(size.originalTrufado, size.priceTrufado)}%
-                            </span>
-                          </div>
-                        )}
-                        <span className="font-bold text-base sm:text-lg text-primary">
-                          R${size.priceTrufado.toFixed(2).replace('.', ',')}
-                        </span>
-                      </div>
-                      <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full whitespace-nowrap">
-                        Personalizar
-                      </span>
-                    </div>
+                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1.5 rounded-full whitespace-nowrap shrink-0">
+                      Montar Pizza
+                    </span>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
@@ -208,7 +203,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                   <Card className="overflow-hidden border-border/60 hover:border-primary/30 transition-colors">
                     <CardContent className="p-3 sm:p-4 flex items-center gap-3">
                       <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-sm">
-                        <img alt={product.name} className="w-full h-full object-cover" src={product.image} />
+                        <img alt={product.name} className="w-full h-full object-cover" src={product.image} loading="lazy" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
@@ -241,8 +236,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
       <CustomizationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        selectedSize={selectedSize}
-        selectedType={selectedType}
+        selectedFlavor={selectedFlavor}
         onAddedToCart={() => {
           setIsModalOpen(false);
           onNavigate?.('carrinho');

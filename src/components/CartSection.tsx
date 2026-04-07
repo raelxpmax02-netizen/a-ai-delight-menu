@@ -24,7 +24,7 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                 <div className="w-24 h-24 flex items-center justify-center bg-muted rounded-full mx-auto mb-6">
                   <ShoppingCart className="w-12 h-12 text-muted-foreground" />
                 </div>
-                <p className="text-xl text-muted-foreground mb-6">Adicione itens ao seu carrinho para continuar</p>
+                <p className="text-xl text-muted-foreground mb-6">Adicione pizzas ao seu carrinho para continuar</p>
                 <Button onClick={() => onNavigate('cardapio')}>Ver Cardápio</Button>
               </CardContent>
             </Card>
@@ -51,31 +51,20 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                 <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-card-foreground mb-2">{item.sizeLabel}</h3>
-                    {item.cremeTrufado && (
+                    {item.borda !== 'Sem borda recheada' && (
                       <p className="text-sm text-muted-foreground mb-1">
-                        <span className="font-medium">Creme:</span> {item.cremeTrufado}
+                        <span className="font-medium">Borda:</span> {item.borda} (+R${item.bordaPrice.toFixed(2).replace('.', ',')})
                       </p>
                     )}
-                    {item.fruit && (
-                      <p className="text-sm text-muted-foreground mb-1">
-                        <span className="font-medium">Fruta:</span> {item.fruit}
-                      </p>
-                    )}
-                    <p className="text-sm text-muted-foreground mb-1">
-                      <span className="font-medium">Leite condensado:</span> {item.leiteCondensado ? 'Sim' : 'Não'}
-                    </p>
-                    {item.freeComplements.length > 0 && (
-                      <p className="text-sm text-muted-foreground mb-1">
-                        <span className="font-medium">Complementos:</span> {item.freeComplements.join(', ')}
-                      </p>
-                    )}
-                    <p className="text-sm text-muted-foreground mb-1">
-                      <span className="font-medium">Talher:</span> {item.querTalher ? 'Sim' : 'Não'}
-                    </p>
                     {item.adicionais.length > 0 && (
                       <p className="text-sm text-muted-foreground mb-1">
                         <span className="font-medium">Adicionais:</span>{' '}
                         {item.adicionais.map(a => `${a.name} (+R$${a.price.toFixed(2).replace('.', ',')})`).join(', ')}
+                      </p>
+                    )}
+                    {item.observations && (
+                      <p className="text-sm text-muted-foreground mb-1">
+                        <span className="font-medium">Obs:</span> {item.observations}
                       </p>
                     )}
                   </div>
