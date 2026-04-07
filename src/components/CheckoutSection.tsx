@@ -41,7 +41,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
       return;
     }
 
-    let message = `🍇 *PEDIDO ${STORE_NAME.toUpperCase()}*\n\n`;
+    let message = `🍕 *PEDIDO ${STORE_NAME.toUpperCase()}*\n\n`;
     message += `👤 *Cliente:* ${name.trim()}\n`;
     message += `🛵 *Tipo:* ${deliveryType === 'entrega' ? 'Entrega' : 'Retirada no local'}\n`;
     if (deliveryType === 'entrega') {
@@ -54,19 +54,14 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
 
     items.forEach((item, index) => {
       message += `*${index + 1}. ${item.sizeLabel}* (x${item.quantity})\n`;
-      if (item.cremeTrufado) {
-        message += `   🍫 Creme: ${item.cremeTrufado}\n`;
+      if (item.borda !== 'Sem borda recheada') {
+        message += `   🧀 Borda: ${item.borda}\n`;
       }
-      if (item.fruit) {
-        message += `   🍌 Fruta: ${item.fruit}\n`;
-      }
-      message += `   🥛 Leite condensado: ${item.leiteCondensado ? 'Sim' : 'Não'}\n`;
-      if (item.freeComplements.length > 0) {
-        message += `   ✓ Complementos: ${item.freeComplements.join(', ')}\n`;
-      }
-      message += `   🥄 Talher: ${item.querTalher ? 'Sim' : 'Não'}\n`;
       if (item.adicionais.length > 0) {
         message += `   ✓ Adicionais: ${item.adicionais.map(a => `${a.name} (+R$${a.price.toFixed(2).replace('.', ',')})`).join(', ')}\n`;
+      }
+      if (item.observations) {
+        message += `   📝 Obs: ${item.observations}\n`;
       }
       message += `   💰 R$ ${(item.totalPrice * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
     });
@@ -78,7 +73,6 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
-    // Save order to database
     await supabase.from('orders').insert({
       customer_name: name.trim(),
       items_count: items.reduce((sum, item) => sum + item.quantity, 0),
@@ -87,7 +81,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
       payment_method: paymentMethod,
     });
 
-    toast({ title: 'Pedido enviado!', description: 'Seu pedido foi enviado para o WhatsApp.' });
+    toast({ title: 'Pedido enviado! 🍕', description: 'Seu pedido foi enviado para o WhatsApp.' });
     clearCart();
     setName('');
     setAddress('');
@@ -107,7 +101,7 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
           {isEmpty && (
             <Card className="rounded-xl shadow-md border border-border bg-muted/50">
               <CardContent className="p-6 text-center">
-                <p className="text-muted-foreground mb-3">Seu carrinho está vazio. Adicione itens no cardápio para finalizar.</p>
+                <p className="text-muted-foreground mb-3">Seu carrinho está vazio. Adicione pizzas no cardápio para finalizar.</p>
                 <Button variant="outline" onClick={() => onNavigate('cardapio')}>Ver Cardápio</Button>
               </CardContent>
             </Card>
@@ -119,7 +113,6 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
                 <Input id="name" placeholder="Digite seu nome" value={name} onChange={(e) => setName(e.target.value)} className="mt-2" />
               </div>
 
-              {/* Entrega ou Retirada */}
               <div>
                 <Label className="text-card-foreground font-medium block mb-3">Entrega ou Retirada? *</Label>
                 <RadioGroup value={deliveryType} onValueChange={setDeliveryType} className="flex gap-4">
@@ -134,7 +127,6 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
                 </RadioGroup>
               </div>
 
-              {/* Endereço - só aparece se for entrega */}
               {deliveryType === 'entrega' && (
                 <div>
                   <Label htmlFor="address" className="text-card-foreground font-medium">Endereço de Entrega *</Label>
@@ -142,7 +134,6 @@ const CheckoutSection = ({ onNavigate }: CheckoutSectionProps) => {
                 </div>
               )}
 
-              {/* Forma de Pagamento */}
               <div>
                 <Label className="text-card-foreground font-medium block mb-3">Forma de Pagamento *</Label>
                 <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-2 gap-3">

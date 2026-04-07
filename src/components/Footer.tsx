@@ -4,9 +4,9 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <span className="text-xl font-bold">Cardápio Digital</span>
+            <span className="text-xl font-bold">🍕 Cardápio Digital</span>
             <p className="text-purple-50 text-sm mt-3 max-w-md">
-              Solução completa para açaíterias e deliveries. Cardápio personalizado, pedidos via WhatsApp, relatórios de vendas e muito mais.
+              Solução completa para pizzarias e deliveries. Cardápio personalizado, pedidos via WhatsApp, relatórios de vendas e muito mais.
             </p>
           </div>
 
@@ -14,7 +14,7 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Funcionalidades</h3>
             <ul className="space-y-2 text-purple-50 text-sm">
               <li>✅ Cardápio digital responsivo</li>
-              <li>✅ Personalização de produtos</li>
+              <li>✅ Personalização de pizzas e bordas</li>
               <li>✅ Pedidos via WhatsApp</li>
               <li>✅ Relatório de vendas</li>
               <li>✅ Promoções do dia</li>

@@ -7,56 +7,40 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { AcaiSize, AcaiType, fruits, freeComplements, adicionais, trufadoCremes } from '@/data/products';
+import { Textarea } from '@/components/ui/textarea';
+import { PizzaFlavor, PizzaSize, pizzaSizes, bordas, adicionais } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
 interface CustomizationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedSize: AcaiSize | null;
-  selectedType: AcaiType;
+  selectedFlavor: PizzaFlavor | null;
   onAddedToCart?: () => void;
 }
 
-const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAddedToCart }: CustomizationModalProps) => {
-  const [selectedFruit, setSelectedFruit] = useState<string>('');
-  const [selectedComplements, setSelectedComplements] = useState<string[]>([]);
+const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: CustomizationModalProps) => {
+  const [selectedSize, setSelectedSize] = useState<string>('grande');
+  const [selectedBorda, setSelectedBorda] = useState<string>('Sem borda recheada');
   const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
-  const [leiteCondensado, setLeiteCondensado] = useState<boolean | null>(null);
-  const [querTalher, setQuerTalher] = useState<boolean | null>(null);
-  const [cremeTrufado, setCremeTrufado] = useState<string>('');
+  const [observations, setObservations] = useState('');
   const { addItem } = useCart();
   const { toast } = useToast();
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedFruit('');
-      setSelectedComplements([]);
+      setSelectedSize('grande');
+      setSelectedBorda('Sem borda recheada');
       setSelectedAdicionais([]);
-      setLeiteCondensado(null);
-      setQuerTalher(null);
-      setCremeTrufado('');
+      setObservations('');
     }
   }, [isOpen]);
 
-  if (!selectedSize) return null;
+  if (!selectedFlavor) return null;
 
-  const basePrice = selectedType === 'trufado' ? selectedSize.priceTrufado : selectedSize.priceTradicional;
-
-  const toggleComplement = (complement: string) => {
-    if (selectedComplements.includes(complement)) {
-      setSelectedComplements(prev => prev.filter(c => c !== complement));
-    } else if (selectedComplements.length < 2) {
-      setSelectedComplements(prev => [...prev, complement]);
-    } else {
-      toast({
-        title: 'Limite atingido',
-        description: 'Você pode escolher no máximo 2 complementos.',
-        variant: 'destructive',
-      });
-    }
-  };
+  const sizeData = pizzaSizes.find(s => s.id === selectedSize)!;
+  const basePrice = selectedFlavor.prices[selectedSize as keyof typeof selectedFlavor.prices];
+  const bordaItem = bordas.find(b => b.name === selectedBorda)!;
 
   const toggleAdicional = (name: string) => {
     setSelectedAdicionais(prev =>
@@ -69,45 +53,31 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
     return sum + (item?.price || 0);
   }, 0);
 
-  const totalPrice = basePrice + adicionaisTotal;
+  const totalPrice = basePrice + bordaItem.price + adicionaisTotal;
 
   const handleAddToCart = () => {
-    if (selectedType === 'trufado' && !cremeTrufado) {
-      toast({ title: 'Creme trufado', description: 'Por favor, escolha o creme do seu açaí trufado.', variant: 'destructive' });
-      return;
-    }
-    if (leiteCondensado === null) {
-      toast({ title: 'Leite condensado', description: 'Por favor, escolha se deseja leite condensado.', variant: 'destructive' });
-      return;
-    }
-    if (querTalher === null) {
-      toast({ title: 'Talher', description: 'Por favor, escolha se deseja talher.', variant: 'destructive' });
-      return;
-    }
-
     const selectedAdicionaisItems = selectedAdicionais.map(name => {
       const item = adicionais.find(a => a.name === name)!;
       return { name: item.name, price: item.price };
     });
 
     addItem({
-      size: selectedSize.id,
-      sizeLabel: `${selectedSize.label} ${selectedType === 'trufado' ? '(Trufado)' : '(Tradicional)'}`,
-      type: selectedType,
+      flavorId: selectedFlavor.id,
+      flavorName: selectedFlavor.name,
+      size: selectedSize,
+      sizeLabel: `Pizza ${selectedFlavor.name} (${sizeData.label})`,
       basePrice,
-      fruit: selectedFruit,
-      freeComplements: selectedComplements,
+      borda: selectedBorda,
+      bordaPrice: bordaItem.price,
       adicionais: selectedAdicionaisItems,
-      leiteCondensado,
-      querTalher,
-      cremeTrufado: selectedType === 'trufado' ? cremeTrufado : undefined,
+      observations,
       quantity: 1,
       totalPrice,
     });
 
     toast({
-      title: 'Adicionado ao carrinho!',
-      description: `${selectedSize.label} ${selectedType === 'trufado' ? 'Trufado' : 'Tradicional'} foi adicionado.`,
+      title: 'Adicionado ao carrinho! 🍕',
+      description: `Pizza ${selectedFlavor.name} ${sizeData.label} foi adicionada.`,
     });
 
     if (onAddedToCart) {
@@ -122,145 +92,60 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
       <DialogContent className="w-[95vw] max-w-lg max-h-[85vh] overflow-y-auto rounded-xl p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-bold text-card-foreground">
-            {selectedSize.label} — {selectedType === 'trufado' ? 'Trufado' : 'Tradicional'}
+            Pizza {selectedFlavor.name}
           </DialogTitle>
-          <p className="text-primary font-semibold text-base sm:text-lg">
-            R$ {basePrice.toFixed(2).replace('.', ',')}
-          </p>
+          <p className="text-sm text-muted-foreground">{selectedFlavor.ingredients.join(' • ')}</p>
         </DialogHeader>
 
         <div className="space-y-5 py-2">
-          {/* Trufado Cream Selection */}
-          {selectedType === 'trufado' && (
-            <div>
-              <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
-                Escolha o creme trufado <span className="text-destructive">*</span>
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {trufadoCremes.map((creme) => (
-                  <div
-                    key={creme}
-                    className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                      cremeTrufado === creme
-                        ? 'bg-primary/10 border-primary'
-                        : 'bg-background border-border hover:border-primary/50'
-                    }`}
-                    onClick={() => setCremeTrufado(creme)}
-                  >
-                    <span className="text-card-foreground text-center text-xs sm:text-sm font-medium">{creme}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Fruit selection */}
+          {/* Size Selection */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
-              Fruta <span className="text-muted-foreground font-normal">(escolha 1)</span>
+              Tamanho <span className="text-destructive">*</span>
             </h3>
-            <div className="grid grid-cols-3 gap-2">
-              {fruits.map((fruit) => (
+            <div className="grid grid-cols-2 gap-2">
+              {pizzaSizes.map((size) => (
                 <div
-                  key={fruit}
-                  className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedFruit === fruit
+                  key={size.id}
+                  className={`flex flex-col items-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                    selectedSize === size.id
                       ? 'bg-primary/10 border-primary'
                       : 'bg-background border-border hover:border-primary/50'
                   }`}
-                  onClick={() => setSelectedFruit(fruit)}
+                  onClick={() => setSelectedSize(size.id)}
                 >
-                  <span className="text-card-foreground text-center text-xs sm:text-sm font-medium">{fruit}</span>
+                  <span className="text-card-foreground text-sm font-semibold">{size.label}</span>
+                  <span className="text-[10px] text-muted-foreground">{size.slices} • {size.serves}</span>
+                  <span className="text-primary font-bold text-sm mt-1">
+                    R$ {selectedFlavor.prices[size.id as keyof typeof selectedFlavor.prices].toFixed(2).replace('.', ',')}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Leite Condensado */}
+          {/* Borda Selection */}
           <div>
             <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
-              Leite Condensado
+              Borda
             </h3>
             <div className="grid grid-cols-2 gap-2">
-              <div
-                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                  leiteCondensado === true
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-background border-border hover:border-primary/50'
-                }`}
-                onClick={() => setLeiteCondensado(true)}
-              >
-                <span className="text-card-foreground text-xs sm:text-sm font-medium">Sim, por favor 🥛</span>
-              </div>
-              <div
-                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                  leiteCondensado === false
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-background border-border hover:border-primary/50'
-                }`}
-                onClick={() => setLeiteCondensado(false)}
-              >
-                <span className="text-card-foreground text-xs sm:text-sm font-medium">Não, obrigado</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Complements */}
-          <div>
-            <h3 className="font-semibold text-card-foreground mb-1 text-sm sm:text-base">
-              Complementos{' '}
-              <span className="text-muted-foreground font-normal">
-                (até 2) — {selectedComplements.length}/2
-              </span>
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {freeComplements.map((complement) => (
+              {bordas.map((borda) => (
                 <div
-                  key={complement}
-                  className={`flex items-center space-x-2 p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedComplements.includes(complement)
+                  key={borda.name}
+                  className={`flex items-center justify-between p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
+                    selectedBorda === borda.name
                       ? 'bg-primary/10 border-primary'
                       : 'bg-background border-border hover:border-primary/50'
                   }`}
-                  onClick={() => toggleComplement(complement)}
+                  onClick={() => setSelectedBorda(borda.name)}
                 >
-                  <Checkbox
-                    checked={selectedComplements.includes(complement)}
-                    onCheckedChange={() => {}}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <span className="text-card-foreground text-xs sm:text-sm pointer-events-none">{complement}</span>
+                  <span className="text-card-foreground text-xs sm:text-sm font-medium">{borda.name}</span>
+                  {borda.price > 0 && (
+                    <span className="text-primary text-xs font-semibold">+R$ {borda.price.toFixed(2).replace('.', ',')}</span>
+                  )}
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Talher */}
-          <div>
-            <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
-              Deseja talher?
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              <div
-                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                  querTalher === true
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-background border-border hover:border-primary/50'
-                }`}
-                onClick={() => setQuerTalher(true)}
-              >
-                <span className="text-card-foreground text-xs sm:text-sm font-medium">Sim, por favor 🥄</span>
-              </div>
-              <div
-                className={`flex items-center justify-center p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
-                  querTalher === false
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-background border-border hover:border-primary/50'
-                }`}
-                onClick={() => setQuerTalher(false)}
-              >
-                <span className="text-card-foreground text-xs sm:text-sm font-medium">Não, obrigado</span>
-              </div>
             </div>
           </div>
 
@@ -286,14 +171,12 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
                       onCheckedChange={() => {}}
                       onClick={(e) => e.stopPropagation()}
                     />
-                    <div>
-                      <span className="text-card-foreground text-xs sm:text-sm font-medium pointer-events-none">
-                        {adicional.name}
-                        {'popular' in adicional && adicional.popular && (
-                          <span className="ml-2 text-[10px] text-amber-600 font-semibold">🔥 Popular</span>
-                        )}
-                      </span>
-                    </div>
+                    <span className="text-card-foreground text-xs sm:text-sm font-medium pointer-events-none">
+                      {adicional.name}
+                      {'popular' in adicional && adicional.popular && (
+                        <span className="ml-2 text-[10px] text-amber-600 font-semibold">🔥 Popular</span>
+                      )}
+                    </span>
                   </div>
                   <span className="text-primary font-semibold text-xs sm:text-sm shrink-0 ml-2">
                     +R$ {adicional.price.toFixed(2).replace('.', ',')}
@@ -301,6 +184,20 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Observations */}
+          <div>
+            <h3 className="font-semibold text-card-foreground mb-2 text-sm sm:text-base">
+              Observações <span className="text-muted-foreground font-normal">(opcional)</span>
+            </h3>
+            <Textarea
+              placeholder="Ex: Tirar cebola, bem assada..."
+              value={observations}
+              onChange={(e) => setObservations(e.target.value)}
+              className="resize-none"
+              rows={2}
+            />
           </div>
 
           {/* Total and Add to Cart */}
@@ -315,7 +212,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedSize, selectedType, onAdd
               onClick={handleAddToCart}
               className="w-full py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg"
             >
-              Adicionar ao Carrinho
+              Adicionar ao Carrinho 🍕
             </Button>
           </div>
         </div>

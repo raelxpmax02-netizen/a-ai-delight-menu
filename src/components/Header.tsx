@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X, Utensils } from 'lucide-react';
+import { ShoppingCart, Menu, X, Pizza } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 
 interface HeaderProps {
@@ -40,7 +40,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
             onClick={() => onNavigate('cardapio')}
           >
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isScrolled ? 'bg-primary/10' : 'bg-white/10'}`}>
-              <Utensils className={`w-4 h-4 ${isScrolled ? 'text-primary' : 'text-white'}`} />
+              <Pizza className={`w-4 h-4 ${isScrolled ? 'text-primary' : 'text-white'}`} />
             </div>
             <span
               className={`text-lg font-bold transition-colors ${
@@ -51,7 +51,6 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
             </span>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <button
@@ -75,7 +74,6 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
             ))}
           </nav>
 
-          {/* Mobile: Cart + Menu */}
           <div className="flex items-center gap-2 md:hidden">
             {totalItems > 0 && (
               <button
@@ -101,7 +99,6 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-background rounded-xl shadow-lg p-2 mb-3 border border-border/50">
             {navItems.map((item) => (

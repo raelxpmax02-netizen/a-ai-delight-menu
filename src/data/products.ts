@@ -1,54 +1,125 @@
-export type AcaiType = 'tradicional' | 'trufado';
+export type PizzaCategory = 'tradicional' | 'especial' | 'premium';
 
-export interface AcaiSize {
+export interface PizzaSize {
   id: string;
   label: string;
-  size: string;
-  priceTradicional: number;
-  priceTrufado: number;
-  promoTradicional?: number;
-  promoTrufado?: number;
-  originalTradicional?: number;
-  originalTrufado?: number;
-  image: string;
-  description: string;
+  slices: string;
+  serves: string;
 }
 
-export const acaiSizes: AcaiSize[] = [
+export const pizzaSizes: PizzaSize[] = [
+  { id: 'broto', label: 'Broto', slices: '4 fatias', serves: '1 pessoa' },
+  { id: 'media', label: 'Média', slices: '6 fatias', serves: '2 pessoas' },
+  { id: 'grande', label: 'Grande', slices: '8 fatias', serves: '3-4 pessoas' },
+  { id: 'familia', label: 'Família', slices: '12 fatias', serves: '5+ pessoas' },
+];
+
+export interface PizzaFlavor {
+  id: string;
+  name: string;
+  description: string;
+  ingredients: string[];
+  category: PizzaCategory;
+  image: string;
+  popular?: boolean;
+  prices: {
+    broto: number;
+    media: number;
+    grande: number;
+    familia: number;
+  };
+  originalPrices?: {
+    broto?: number;
+    media?: number;
+    grande?: number;
+    familia?: number;
+  };
+}
+
+export const pizzaFlavors: PizzaFlavor[] = [
   {
-    id: '300ml',
-    label: 'Açaí 300ml',
-    size: '300ml',
-    originalTradicional: 17.99,
-    priceTradicional: 14.39,
-    priceTrufado: 22.00,
-    description: 'Perfeito para um lanche rápido',
-    image: '/assets/foto_01.jpg',
+    id: 'margherita',
+    name: 'Margherita',
+    description: 'O clássico italiano com ingredientes frescos',
+    ingredients: ['Molho de tomate', 'Mussarela de búfala', 'Manjericão fresco', 'Azeite'],
+    category: 'tradicional',
+    image: '/src/assets/pizza_margherita.jpg',
+    popular: true,
+    prices: { broto: 22.90, media: 34.90, grande: 44.90, familia: 59.90 },
+    originalPrices: { broto: 28.90, media: 42.90, grande: 54.90, familia: 72.90 },
   },
   {
-    id: '400ml',
-    label: 'Açaí 400ml',
-    size: '400ml',
-    originalTradicional: 24.99,
-    priceTradicional: 19.99,
-    priceTrufado: 28.00,
-    description: 'Tamanho ideal para matar a fome',
-    image: '/assets/foto_04.jpg',
+    id: 'calabresa',
+    name: 'Calabresa',
+    description: 'Sabor marcante com calabresa defumada',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Calabresa fatiada', 'Cebola'],
+    category: 'tradicional',
+    image: '/src/assets/pizza_calabresa.jpg',
+    popular: true,
+    prices: { broto: 24.90, media: 36.90, grande: 46.90, familia: 62.90 },
+    originalPrices: { broto: 30.90, media: 44.90, grande: 56.90, familia: 76.90 },
   },
   {
-    id: '500ml',
-    label: 'Açaí 500ml',
-    size: '500ml',
-    originalTradicional: 31.99,
-    priceTradicional: 25.59,
-    originalTrufado: 39.99,
-    priceTrufado: 31.99,
-    description: 'Para quem ama açaí',
-    image: '/assets/foto_03.jpg',
+    id: 'portuguesa',
+    name: 'Portuguesa',
+    description: 'Recheio farto e saboroso',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Presunto', 'Ovo', 'Cebola', 'Azeitona', 'Ervilha'],
+    category: 'tradicional',
+    image: '/src/assets/pizza_calabresa.jpg',
+    prices: { broto: 25.90, media: 38.90, grande: 48.90, familia: 64.90 },
+  },
+  {
+    id: 'frango-catupiry',
+    name: 'Frango com Catupiry',
+    description: 'Combinação perfeita e cremosa',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Frango desfiado', 'Catupiry'],
+    category: 'especial',
+    image: '/src/assets/pizza_margherita.jpg',
+    popular: true,
+    prices: { broto: 27.90, media: 40.90, grande: 52.90, familia: 68.90 },
+    originalPrices: { media: 48.90, grande: 62.90 },
+  },
+  {
+    id: '4-queijos',
+    name: 'Quatro Queijos',
+    description: 'Para os amantes de queijo',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Provolone', 'Gorgonzola', 'Parmesão'],
+    category: 'especial',
+    image: '/src/assets/pizza_4queijos.jpg',
+    prices: { broto: 28.90, media: 42.90, grande: 54.90, familia: 72.90 },
+    originalPrices: { grande: 64.90, familia: 84.90 },
+  },
+  {
+    id: 'pepperoni',
+    name: 'Pepperoni',
+    description: 'Clássica americana com pepperoni premium',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Pepperoni'],
+    category: 'especial',
+    image: '/src/assets/pizza_calabresa.jpg',
+    popular: true,
+    prices: { broto: 29.90, media: 43.90, grande: 55.90, familia: 74.90 },
+  },
+  {
+    id: 'bacon-cheddar',
+    name: 'Bacon com Cheddar',
+    description: 'Irresistível combinação defumada',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Bacon crocante', 'Cheddar', 'Cebola caramelizada'],
+    category: 'premium',
+    image: '/src/assets/pizza_4queijos.jpg',
+    prices: { broto: 32.90, media: 46.90, grande: 58.90, familia: 78.90 },
+    originalPrices: { grande: 68.90 },
+  },
+  {
+    id: 'camarao',
+    name: 'Camarão',
+    description: 'Sofisticada com camarões selecionados',
+    ingredients: ['Molho de tomate', 'Mussarela', 'Camarão', 'Catupiry', 'Tomate cereja'],
+    category: 'premium',
+    image: '/src/assets/pizza_margherita.jpg',
+    prices: { broto: 35.90, media: 52.90, grande: 64.90, familia: 84.90 },
   },
 ];
 
-// Produtos extras fictícios para demonstração
 export interface ExtraProduct {
   id: string;
   name: string;
@@ -62,114 +133,82 @@ export interface ExtraProduct {
 
 export const extraProducts: ExtraProduct[] = [
   {
-    id: 'milkshake-ovomaltine',
-    name: 'Milkshake de Ovomaltine',
-    description: 'Cremoso e irresistível, feito com Ovomaltine de verdade',
-    price: 18.90,
-    originalPrice: 22.90,
-    image: '/assets/foto_02.jpg',
-    category: 'Milkshakes',
-    popular: true,
+    id: 'coca-cola-lata',
+    name: 'Coca-Cola Lata',
+    description: '350ml gelada',
+    price: 6.00,
+    image: '/src/assets/bebidas.jpg',
+    category: 'Bebidas',
   },
   {
-    id: 'milkshake-nutella',
-    name: 'Milkshake de Nutella',
-    description: 'Para os amantes de avelã, puro sabor',
-    price: 21.90,
-    image: '/assets/foto_02.jpg',
-    category: 'Milkshakes',
-  },
-  {
-    id: 'sorvete-1bola',
-    name: 'Sorvete 1 Bola',
-    description: 'Escolha seu sabor favorito',
-    price: 8.00,
-    image: '/assets/foto_03.jpg',
-    category: 'Sorvetes',
-  },
-  {
-    id: 'sorvete-2bolas',
-    name: 'Sorvete 2 Bolas',
-    description: 'Combine dois sabores incríveis',
-    price: 14.00,
-    originalPrice: 16.00,
-    image: '/assets/foto_03.jpg',
-    category: 'Sorvetes',
-    popular: true,
-  },
-  {
-    id: 'agua-coco',
-    name: 'Água de Coco',
-    description: 'Natural e refrescante',
-    price: 7.00,
-    image: '/assets/foto_01.jpg',
+    id: 'guarana-lata',
+    name: 'Guaraná Lata',
+    description: '350ml gelado',
+    price: 5.50,
+    image: '/src/assets/bebidas.jpg',
     category: 'Bebidas',
   },
   {
     id: 'suco-natural',
     name: 'Suco Natural',
-    description: 'Laranja, morango ou maracujá',
+    description: 'Laranja, limão ou maracujá',
     price: 10.00,
-    image: '/assets/foto_01.jpg',
+    image: '/src/assets/bebidas.jpg',
     category: 'Bebidas',
+  },
+  {
+    id: 'coca-cola-2l',
+    name: 'Coca-Cola 2L',
+    description: 'Ideal para compartilhar',
+    price: 14.00,
+    originalPrice: 16.00,
+    image: '/src/assets/bebidas.jpg',
+    category: 'Bebidas',
+    popular: true,
+  },
+  {
+    id: 'brownie',
+    name: 'Brownie com Sorvete',
+    description: 'Brownie quentinho com sorvete de creme',
+    price: 16.90,
+    originalPrice: 19.90,
+    image: '/src/assets/sobremesa.jpg',
+    category: 'Sobremesas',
+    popular: true,
+  },
+  {
+    id: 'petit-gateau',
+    name: 'Petit Gâteau',
+    description: 'Bolo de chocolate com recheio cremoso',
+    price: 19.90,
+    image: '/src/assets/sobremesa.jpg',
+    category: 'Sobremesas',
   },
 ];
 
-export const fruits = ['Banana', 'Uva', 'Morango'];
-
-export const freeComplements = [
-  'Leite em pó',
-  'Ovomaltine',
-  'Sucrilhos',
-  'Chocoboll',
-  'Paçoca',
-  'Granola',
-  'Amendoim',
-  'Cobertura fini - morango',
-  'Cobertura fini - banana',
+export const bordas = [
+  { name: 'Sem borda recheada', price: 0 },
+  { name: 'Catupiry', price: 8.00 },
+  { name: 'Cheddar', price: 8.00 },
+  { name: 'Chocolate', price: 10.00 },
 ];
 
 export const adicionais = [
-  { name: 'Nutella', price: 12.00, description: '', popular: true },
-  { name: 'Morango', price: 5.00, description: '' },
-  { name: 'Banana', price: 5.00, description: '' },
-  { name: 'Leite em Pó', price: 5.00, description: '' },
-  { name: 'Granola', price: 5.00, description: '' },
-  { name: 'Sucrilhos', price: 5.00, description: '' },
-  { name: 'Amendoim', price: 5.00, description: '' },
-  { name: 'Paçoca', price: 5.00, description: '' },
-  { name: 'Confete', price: 5.00, description: '' },
-  { name: 'Chocobol', price: 5.00, description: '' },
-  { name: 'Ovomaltine', price: 5.00, description: '' },
-  { name: 'Creme de Leite em Pó', price: 8.00, description: '' },
-  { name: 'Creme de Avelã', price: 8.00, description: '' },
-  { name: 'Cobertura Fini Beijos (Morango)', price: 5.00, description: '' },
-  { name: 'Cobertura Fini Dentaduras (Framboesa)', price: 5.00, description: '' },
-  { name: 'Cobertura Fini Bananas', price: 5.00, description: '' },
+  { name: 'Bacon extra', price: 6.00, popular: true },
+  { name: 'Cheddar extra', price: 5.00 },
+  { name: 'Catupiry extra', price: 5.00 },
+  { name: 'Calabresa extra', price: 5.00 },
+  { name: 'Mussarela extra', price: 4.00 },
+  { name: 'Cebola caramelizada', price: 4.00 },
+  { name: 'Azeitona extra', price: 3.00 },
+  { name: 'Orégano especial', price: 2.00 },
 ];
-
-export const paidComplements = [
-  { name: 'Leite Ninho', price: 2.00 },
-  { name: 'Nutella', price: 2.00 },
-  { name: 'KitKat', price: 2.00 },
-  { name: 'Bis', price: 2.00 },
-  { name: 'Ovomaltine', price: 2.00 },
-];
-
-export const sauces = [
-  'Chocolate',
-  'Morango',
-  'Caramelo',
-  'Leite condensado',
-];
-
-export const trufadoCremes = ['Creme de Avelã', 'Creme de Leite em Pó'];
 
 export const WHATSAPP_NUMBER = '5511933651215';
 
-export const STORE_NAME = 'Sua Açaíteria';
+export const STORE_NAME = 'Sua Pizzaria';
 
-export const STORE_DESCRIPTION = 'Um cardápio digital completo, moderno e personalizado para a sua açaíteria. Sistema de pedidos integrado via WhatsApp, personalização de açaí, controle de pedidos e relatórios — tudo em um só lugar.';
+export const STORE_DESCRIPTION = 'Um cardápio digital completo, moderno e personalizado para a sua pizzaria. Sistema de pedidos integrado via WhatsApp, personalização de pizzas, controle de pedidos e relatórios — tudo em um só lugar.';
 
 export const STORE_DESCRIPTION_2 = 'Aumente suas vendas com um cardápio profissional que seus clientes vão amar. Fácil de usar, responsivo para celular e pronto para impulsionar o seu negócio.';
 
@@ -181,13 +220,13 @@ export const STORE_ADDRESS = {
 };
 
 export const STORE_HOURS = [
-  { day: 'Segunda-feira', hours: '09:00 - 22:00' },
-  { day: 'Terça-feira', hours: '09:00 - 22:00' },
-  { day: 'Quarta-feira', hours: '09:00 - 22:00' },
-  { day: 'Quinta-feira', hours: '09:00 - 22:00' },
-  { day: 'Sexta-feira', hours: '09:00 - 23:00' },
-  { day: 'Sábado', hours: '10:00 - 23:00' },
-  { day: 'Domingo', hours: '10:00 - 20:00' },
+  { day: 'Segunda-feira', hours: '18:00 - 23:00' },
+  { day: 'Terça-feira', hours: '18:00 - 23:00' },
+  { day: 'Quarta-feira', hours: '18:00 - 23:00' },
+  { day: 'Quinta-feira', hours: '18:00 - 23:00' },
+  { day: 'Sexta-feira', hours: '18:00 - 00:00' },
+  { day: 'Sábado', hours: '18:00 - 00:00' },
+  { day: 'Domingo', hours: '18:00 - 22:00' },
 ];
 
 export const STORE_PHONE = '(00) 00000-0000';

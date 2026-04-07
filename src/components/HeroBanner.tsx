@@ -1,5 +1,4 @@
-import { STORE_NAME } from '@/data/products';
-import heroImage from '@/assets/foto_03.jpg';
+import heroImage from '@/assets/pizza_hero.jpg';
 import { Sparkles, Rocket } from 'lucide-react';
 
 interface HeroBannerProps {
@@ -11,9 +10,11 @@ const HeroBanner = ({ onNavigate }: HeroBannerProps) => {
     <section className="relative pt-20 overflow-hidden">
       <div className="absolute inset-0">
         <img
-          alt="Açaí"
+          alt="Pizza"
           className="w-full h-full object-cover object-center"
           src={heroImage}
+          width={1920}
+          height={1080}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
       </div>
@@ -22,13 +23,13 @@ const HeroBanner = ({ onNavigate }: HeroBannerProps) => {
         <div className="flex flex-col items-center sm:items-start gap-3 text-center sm:text-left">
           <div className="flex items-center gap-2 bg-primary/20 border border-primary/30 text-primary-foreground px-3 py-1.5 rounded-full">
             <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-semibold text-white/90">Cardápio Digital Profissional</span>
+            <span className="text-xs font-semibold text-white/90">Cardápio Digital para Pizzarias</span>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
-            Personalize seu Cardápio
+            Seu Cardápio Digital 🍕
           </h1>
           <p className="text-white/80 text-sm sm:text-base max-w-md">
-            Sistema completo de pedidos via WhatsApp, personalização de produtos e relatórios de vendas ✨
+            Sistema completo de pedidos via WhatsApp, personalização de pizzas, bordas, adicionais e relatórios de vendas ✨
           </p>
           <div className="flex items-center gap-3 mt-2">
             <button

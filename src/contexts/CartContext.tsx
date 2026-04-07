@@ -1,18 +1,16 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { AcaiType } from '@/data/products';
 
 export interface CartItem {
   id: string;
+  flavorId: string;
+  flavorName: string;
   size: string;
   sizeLabel: string;
-  type: AcaiType;
   basePrice: number;
-  fruit: string;
-  freeComplements: string[];
+  borda: string;
+  bordaPrice: number;
   adicionais: { name: string; price: number }[];
-  leiteCondensado: boolean;
-  querTalher: boolean;
-  cremeTrufado?: string;
+  observations: string;
   quantity: number;
   totalPrice: number;
 }

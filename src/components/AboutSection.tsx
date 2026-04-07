@@ -2,7 +2,7 @@ import { Smartphone, MessageSquare, BarChart3, Palette, Zap, Shield } from 'luci
 
 const features = [
   { icon: Smartphone, title: 'Responsivo', desc: 'Funciona perfeitamente em celular, tablet e desktop.' },
-  { icon: MessageSquare, title: 'WhatsApp Integrado', desc: 'Pedidos enviados direto para o WhatsApp do estabelecimento.' },
+  { icon: MessageSquare, title: 'WhatsApp Integrado', desc: 'Pedidos enviados direto para o WhatsApp da pizzaria.' },
   { icon: BarChart3, title: 'Relatórios', desc: 'Acompanhe vendas, pedidos confirmados e receita em tempo real.' },
   { icon: Palette, title: 'Personalizável', desc: 'Cores, logo, produtos e preços — tudo do seu jeito.' },
   { icon: Zap, title: 'Rápido', desc: 'Cardápio carrega instantaneamente, sem travamentos.' },
@@ -18,7 +18,7 @@ const AboutSection = () => {
             Por que escolher este cardápio?
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Uma solução profissional e completa para transformar o atendimento da sua açaíteria ou delivery.
+            Uma solução profissional e completa para transformar o atendimento da sua pizzaria ou delivery.
           </p>
         </div>
 
@@ -36,7 +36,7 @@ const AboutSection = () => {
 
         <div className="text-center mt-12">
           <div className="inline-block bg-primary/10 border border-primary/20 rounded-2xl px-8 py-6">
-            <p className="text-lg font-bold text-card-foreground mb-1">Quer um cardápio como este?</p>
+            <p className="text-lg font-bold text-card-foreground mb-1">Quer um cardápio como este para sua pizzaria? 🍕</p>
             <p className="text-sm text-muted-foreground">Entre em contato e tenha o seu cardápio digital personalizado!</p>
           </div>
         </div>
