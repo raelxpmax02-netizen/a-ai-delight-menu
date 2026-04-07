@@ -45,11 +45,8 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-                  {item.fruit && (
-                    <p className="text-xs text-muted-foreground">Fruta: {item.fruit}</p>
-                  )}
-                  {item.freeComplements.length > 0 && (
-                    <p className="text-xs text-muted-foreground">Complementos: {item.freeComplements.join(', ')}</p>
+                  {item.borda && item.borda !== 'Sem borda recheada' && (
+                    <p className="text-xs text-muted-foreground">Borda: {item.borda}</p>
                   )}
                   {item.adicionais.length > 0 && (
                     <p className="text-xs text-muted-foreground">
