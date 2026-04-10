@@ -1,13 +1,12 @@
 import { motion } from 'framer-motion';
-import { Clock, MapPin, Phone } from 'lucide-react';
 import { STORE_HOURS, STORE_ADDRESS, STORE_PHONE } from '@/data/products';
 
 const OperatingHours = () => {
   const now = new Date();
   const dayIndex = now.getDay();
-  const dayMap = [6, 0, 1, 2, 3, 4, 5]; // Sun=6, Mon=0...
+  const dayMap = [6, 0, 1, 2, 3, 4, 5];
   const todayIndex = dayMap[dayIndex];
-  
+
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
   const currentTime = currentHour * 60 + currentMinute;
@@ -27,83 +26,64 @@ const OperatingHours = () => {
   const open = isOpen();
 
   return (
-    <section className="py-8 sm:py-12 bg-card">
+    <section className="py-10 sm:py-14 bg-background">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-6 sm:mb-8"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <Clock className="w-4 h-4 text-primary" />
-            <span className="text-xs font-semibold text-primary uppercase tracking-wider">Funcionamento</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">
-            Horários & Localização 📍
-          </h2>
-        </motion.div>
+        <div className="mb-8">
+          <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">Informações</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">Horários & Contato</h2>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Hours */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-muted/50 rounded-xl p-5 border border-border/60"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-muted/40 rounded-lg p-5 border border-border/40"
           >
             <div className="flex items-center gap-2 mb-4">
-              <div className={`w-2.5 h-2.5 rounded-full ${open ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-              <span className={`text-sm font-semibold ${open ? 'text-green-600' : 'text-red-500'}`}>
-                {open ? 'Aberto agora' : 'Fechado agora'}
+              <span className={`w-2 h-2 rounded-full ${open ? 'bg-green-500' : 'bg-red-400'}`} />
+              <span className={`text-xs font-medium ${open ? 'text-green-600' : 'text-red-500'}`}>
+                {open ? 'Aberto agora' : 'Fechado'}
               </span>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1">
               {STORE_HOURS.map((item, i) => (
                 <div
                   key={item.day}
-                  className={`flex justify-between items-center py-2 px-3 rounded-lg text-sm ${
+                  className={`flex justify-between py-2 px-3 rounded text-sm ${
                     i === todayIndex
-                      ? 'bg-primary/10 border border-primary/20 font-semibold text-card-foreground'
+                      ? 'bg-primary/5 font-medium text-card-foreground'
                       : 'text-muted-foreground'
                   }`}
                 >
-                  <span>{item.day}</span>
-                  <span className="font-mono text-xs">{item.hours}</span>
+                  <span className="text-xs">{item.day}</span>
+                  <span className="text-xs font-mono">{item.hours}</span>
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* Location & Contact */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
             className="space-y-4"
           >
-            <div className="bg-muted/50 rounded-xl p-5 border border-border/60">
-              <div className="flex items-center gap-2 mb-3">
-                <MapPin className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-card-foreground">Endereço</span>
-              </div>
+            <div className="bg-muted/40 rounded-lg p-5 border border-border/40">
+              <p className="text-xs font-medium text-card-foreground mb-2">Endereço</p>
               <p className="text-sm text-muted-foreground">{STORE_ADDRESS.street}</p>
-              <p className="text-sm text-muted-foreground">{STORE_ADDRESS.neighborhood}</p>
-              <p className="text-sm text-muted-foreground">{STORE_ADDRESS.city}</p>
+              <p className="text-sm text-muted-foreground">{STORE_ADDRESS.neighborhood} — {STORE_ADDRESS.city}</p>
               <p className="text-xs text-muted-foreground mt-1">{STORE_ADDRESS.cep}</p>
             </div>
 
-            <div className="bg-muted/50 rounded-xl p-5 border border-border/60">
-              <div className="flex items-center gap-2 mb-3">
-                <Phone className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-card-foreground">Contato</span>
-              </div>
+            <div className="bg-muted/40 rounded-lg p-5 border border-border/40">
+              <p className="text-xs font-medium text-card-foreground mb-2">Telefone</p>
               <p className="text-sm text-muted-foreground">{STORE_PHONE}</p>
             </div>
 
-            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl p-5 border border-primary/20">
-              <p className="text-sm font-semibold text-card-foreground mb-1">🛵 Taxa de entrega</p>
-              <p className="text-xs text-muted-foreground">Consulte no momento do pedido. Entrega para toda a região!</p>
+            <div className="bg-primary/5 rounded-lg p-5 border border-primary/10">
+              <p className="text-xs font-medium text-card-foreground mb-1">Entrega</p>
+              <p className="text-[11px] text-muted-foreground">Taxa consultada no momento do pedido. Atendemos toda a região.</p>
             </div>
           </motion.div>
         </div>
