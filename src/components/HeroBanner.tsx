@@ -1,4 +1,4 @@
-import heroImage from '@/assets/pizza_hero.jpg';
+import heroImage from '@/assets/pizza_hero_v2.jpg';
 import { Sparkles, Rocket } from 'lucide-react';
 
 interface HeroBannerProps {
