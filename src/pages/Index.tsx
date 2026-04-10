@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import MenuSection from '@/components/MenuSection';
+import CombosSection from '@/components/CombosSection';
 import CartSection from '@/components/CartSection';
 import CheckoutSection from '@/components/CheckoutSection';
 import FloatingCart from '@/components/FloatingCart';
 import Footer from '@/components/Footer';
 import AboutSection from '@/components/AboutSection';
 import HeroBanner from '@/components/HeroBanner';
+import OperatingHours from '@/components/OperatingHours';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('cardapio');
@@ -14,8 +16,10 @@ const Index = () => {
   const sectionRefs = {
     inicio: useRef<HTMLDivElement>(null),
     cardapio: useRef<HTMLDivElement>(null),
+    combos: useRef<HTMLDivElement>(null),
     carrinho: useRef<HTMLDivElement>(null),
     finalizar: useRef<HTMLDivElement>(null),
+    horarios: useRef<HTMLDivElement>(null),
     sobre: useRef<HTMLDivElement>(null),
   };
 
@@ -60,6 +64,10 @@ const Index = () => {
       <div ref={sectionRefs.cardapio}>
         <MenuSection onNavigate={scrollToSection} />
       </div>
+
+      <div ref={sectionRefs.combos}>
+        <CombosSection />
+      </div>
       
       <div ref={sectionRefs.carrinho}>
         <CartSection onNavigate={scrollToSection} />
@@ -67,6 +75,10 @@ const Index = () => {
       
       <div ref={sectionRefs.finalizar}>
         <CheckoutSection onNavigate={scrollToSection} />
+      </div>
+
+      <div ref={sectionRefs.horarios}>
+        <OperatingHours />
       </div>
 
       <div ref={sectionRefs.sobre}>
