@@ -4,6 +4,7 @@ export interface CartItem {
   id: string;
   flavorId: string;
   flavorName: string;
+  image: string;
   size: string;
   sizeLabel: string;
   basePrice: number;

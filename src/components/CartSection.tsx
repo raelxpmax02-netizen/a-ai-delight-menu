@@ -47,10 +47,13 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
         <div className="max-w-4xl mx-auto space-y-4">
           {items.map((item) => (
             <Card key={item.id} className="bg-background rounded-xl shadow-md overflow-hidden">
-              <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-card-foreground mb-2">{item.sizeLabel}</h3>
+              <CardContent className="p-4">
+                <div className="flex gap-4">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                    <img src={item.image} alt={item.flavorName} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base sm:text-lg font-bold text-card-foreground mb-1">{item.sizeLabel}</h3>
                     {item.borda !== 'Sem borda recheada' && (
                       <p className="text-sm text-muted-foreground mb-1">
                         <span className="font-medium">Borda:</span> {item.borda} (+R${item.bordaPrice.toFixed(2).replace('.', ',')})
@@ -67,23 +70,23 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                         <span className="font-medium">Obs:</span> {item.observations}
                       </p>
                     )}
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2 rounded-full bg-muted hover:bg-border transition-colors">
-                        <Minus className="w-4 h-4 text-card-foreground" />
-                      </button>
-                      <span className="w-8 text-center font-semibold text-card-foreground">{item.quantity}</span>
-                      <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2 rounded-full bg-muted hover:bg-border transition-colors">
-                        <Plus className="w-4 h-4 text-card-foreground" />
+                    <div className="flex items-center gap-3 mt-2">
+                      <div className="flex items-center gap-1.5">
+                        <button onClick={(e) => { e.stopPropagation(); updateQuantity(item.id, item.quantity - 1); }} className="p-1.5 rounded-full bg-muted hover:bg-border transition-colors">
+                          <Minus className="w-3.5 h-3.5 text-card-foreground" />
+                        </button>
+                        <span className="w-6 text-center font-semibold text-card-foreground text-sm">{item.quantity}</span>
+                        <button onClick={(e) => { e.stopPropagation(); updateQuantity(item.id, item.quantity + 1); }} className="p-1.5 rounded-full bg-muted hover:bg-border transition-colors">
+                          <Plus className="w-3.5 h-3.5 text-card-foreground" />
+                        </button>
+                      </div>
+                      <span className="text-base font-bold text-primary">
+                        R$ {(item.totalPrice * item.quantity).toFixed(2).replace('.', ',')}
+                      </span>
+                      <button onClick={(e) => { e.stopPropagation(); removeItem(item.id); }} className="p-1.5 rounded-full bg-destructive/10 hover:bg-destructive/20 transition-colors ml-auto">
+                        <Trash2 className="w-4 h-4 text-destructive" />
                       </button>
                     </div>
-                    <span className="text-xl font-bold text-primary min-w-[100px] text-right">
-                      R$ {(item.totalPrice * item.quantity).toFixed(2).replace('.', ',')}
-                    </span>
-                    <button onClick={() => removeItem(item.id)} className="p-2 rounded-full bg-destructive/10 hover:bg-destructive/20 transition-colors">
-                      <Trash2 className="w-5 h-5 text-destructive" />
-                    </button>
                   </div>
                 </div>
               </CardContent>

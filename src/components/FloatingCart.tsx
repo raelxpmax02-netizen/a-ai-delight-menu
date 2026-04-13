@@ -38,9 +38,14 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {items.map((item) => (
-                <div key={item.id} className="bg-muted rounded-xl p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-foreground">{item.sizeLabel}</h3>
+                <div key={item.id} className="bg-muted rounded-xl p-3">
+                  <div className="flex gap-3">
+                    <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0">
+                      <img src={item.image} alt={item.flavorName} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-start mb-1">
+                    <h3 className="font-bold text-foreground text-sm">{item.sizeLabel}</h3>
                     <button onClick={() => removeItem(item.id)} className="p-1 text-destructive hover:bg-destructive/10 rounded">
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -66,6 +71,8 @@ const FloatingCart = ({ onNavigate }: FloatingCartProps) => {
                     <span className="font-bold text-primary">
                       R$ {(item.totalPrice * item.quantity).toFixed(2).replace('.', ',')}
                     </span>
+                  </div>
+                    </div>
                   </div>
                 </div>
               ))}
