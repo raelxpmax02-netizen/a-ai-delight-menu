@@ -66,7 +66,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
         </div>
 
         {/* Pizza Cards */}
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {filteredFlavors.map((flavor, index) => (
             <motion.div
               key={flavor.id}
@@ -80,7 +80,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
               >
                 <CardContent className="p-0">
                   <div className="flex items-center gap-3 p-3">
-                    <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-lg overflow-hidden shrink-0">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 shadow-sm">
                       <img
                         alt={flavor.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -97,14 +97,16 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-muted-foreground mb-1.5 line-clamp-1">{flavor.ingredients.join(' · ')}</p>
-                      <span className="font-semibold text-primary text-sm">
-                        a partir de R${flavor.prices.broto.toFixed(2).replace('.', ',')}
-                      </span>
+                      <p className="text-[11px] text-muted-foreground mb-2 line-clamp-1">{flavor.ingredients.join(' · ')}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-primary text-sm">
+                          a partir de R${flavor.prices.broto.toFixed(2).replace('.', ',')}
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full">
+                          Pedir Pizza
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                      Montar →
-                    </span>
                   </div>
                 </CardContent>
               </Card>
