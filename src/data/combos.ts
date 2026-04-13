@@ -18,8 +18,8 @@ export const combos: Combo[] = [
     items: ['1 Pizza Broto (qualquer sabor)', '1 Refrigerante Lata 350ml'],
     price: 29.90,
     originalPrice: 36.90,
-    image: '/src/assets/combo_pizza.jpg',
-    badge: '🔥 Mais vendido',
+    image: '/images/combo_pizza.jpg',
+    badge: 'Mais vendido',
     popular: true,
   },
   {
@@ -29,8 +29,7 @@ export const combos: Combo[] = [
     items: ['1 Pizza Média (qualquer sabor)', '2 Refrigerantes Lata 350ml', '1 Sobremesa'],
     price: 54.90,
     originalPrice: 68.90,
-    image: '/src/assets/combo_casal.jpg',
-    badge: '❤️ Romântico',
+    image: '/images/combo_casal.jpg',
   },
   {
     id: 'combo-familia',
@@ -39,8 +38,7 @@ export const combos: Combo[] = [
     items: ['2 Pizzas Grandes (qualquer sabor)', '1 Refrigerante 2L', '1 Sobremesa'],
     price: 99.90,
     originalPrice: 132.90,
-    image: '/src/assets/combo_familia.jpg',
-    badge: '👨‍👩‍👧‍👦 Família',
+    image: '/images/combo_familia.jpg',
     popular: true,
   },
 ];
