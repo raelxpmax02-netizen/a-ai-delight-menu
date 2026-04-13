@@ -70,7 +70,6 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                         <span className="font-medium">Obs:</span> {item.observations}
                       </p>
                     )}
-                    </div>
                     <div className="flex items-center gap-3 mt-2">
                       <div className="flex items-center gap-1.5">
                         <button onClick={(e) => { e.stopPropagation(); updateQuantity(item.id, item.quantity - 1); }} className="p-1.5 rounded-full bg-muted hover:bg-border transition-colors">
