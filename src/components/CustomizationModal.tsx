@@ -64,6 +64,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
     addItem({
       flavorId: selectedFlavor.id,
       flavorName: selectedFlavor.name,
+      image: selectedFlavor.image,
       size: selectedSize,
       sizeLabel: `${selectedFlavor.name} (${sizeData.label})`,
       basePrice,
