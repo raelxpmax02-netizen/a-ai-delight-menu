@@ -52,7 +52,7 @@ const OrderStatsModal = ({ isOpen, onClose }: OrderStatsModalProps) => {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'teste0101') {
+    if (password === 'teste01') {
       setAuthenticated(true);
       setError('');
       fetchStats();

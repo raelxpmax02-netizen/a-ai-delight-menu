@@ -1,4 +1,4 @@
-import heroImage from '@/assets/pizza_hero_v2.jpg';
+const heroImage = '/images/pizza_hero_v2.jpg';
 
 interface HeroBannerProps {
   onNavigate: (section: string) => void;
