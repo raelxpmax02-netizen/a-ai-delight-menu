@@ -18,6 +18,29 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
   const [isStatsOpen, setIsStatsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('todas');
   const [searchQuery, setSearchQuery] = useState('');
+  const { addItem } = useCart();
+  const { toast } = useToast();
+
+  const handleAddExtra = (product: typeof extraProducts[0]) => {
+    addItem({
+      flavorId: product.id,
+      flavorName: product.name,
+      image: product.image,
+      size: '',
+      sizeLabel: product.name,
+      basePrice: product.price,
+      borda: '',
+      bordaPrice: 0,
+      adicionais: [],
+      observations: '',
+      quantity: 1,
+      totalPrice: product.price,
+    });
+    toast({
+      title: 'Adicionado ao carrinho',
+      description: `${product.name} adicionado.`,
+    });
+  };
 
   const handleCustomize = (flavor: PizzaFlavor) => {
     setSelectedFlavor(flavor);
