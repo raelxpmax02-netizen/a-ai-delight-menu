@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
-import { pizzaFlavors, PizzaFlavor, extraProducts } from '@/data/products';
+import { pizzaFlavors, PizzaFlavor, extraProducts, ExtraProduct } from '@/data/products';
 import { Card, CardContent } from '@/components/ui/card';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
-import { useCart } from '@/contexts/CartContext';
-import { useToast } from '@/hooks/use-toast';
+import UpsellModal from './UpsellModal';
+import ExtraProductModal from './ExtraProductModal';
 
 interface MenuSectionProps {
   onNavigate?: (section: string) => void;
@@ -16,35 +16,20 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
   const [selectedFlavor, setSelectedFlavor] = useState<PizzaFlavor | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isStatsOpen, setIsStatsOpen] = useState(false);
+  const [isUpsellOpen, setIsUpsellOpen] = useState(false);
+  const [selectedExtra, setSelectedExtra] = useState<ExtraProduct | null>(null);
+  const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('todas');
   const [searchQuery, setSearchQuery] = useState('');
-  const { addItem } = useCart();
-  const { toast } = useToast();
-
-  const handleAddExtra = (product: typeof extraProducts[0]) => {
-    addItem({
-      flavorId: product.id,
-      flavorName: product.name,
-      image: product.image,
-      size: '',
-      sizeLabel: product.name,
-      basePrice: product.price,
-      borda: '',
-      bordaPrice: 0,
-      adicionais: [],
-      observations: '',
-      quantity: 1,
-      totalPrice: product.price,
-    });
-    toast({
-      title: 'Adicionado ao carrinho',
-      description: `${product.name} adicionado.`,
-    });
-  };
 
   const handleCustomize = (flavor: PizzaFlavor) => {
     setSelectedFlavor(flavor);
     setIsModalOpen(true);
+  };
+
+  const handleExtraClick = (product: ExtraProduct) => {
+    setSelectedExtra(product);
+    setIsExtraModalOpen(true);
   };
 
   const categories = [
@@ -193,7 +178,11 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             <h3 className="text-lg font-bold text-card-foreground mb-4">{category}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {products.map((product) => (
-                <Card key={product.id} className="overflow-hidden border-border/50 hover:border-primary/30 transition-all">
+                <Card
+                  key={product.id}
+                  className="overflow-hidden border-border/50 hover:border-primary/30 transition-all cursor-pointer"
+                  onClick={() => handleExtraClick(product)}
+                >
                   <CardContent className="p-3 flex items-center gap-3">
                     <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0">
                       <img alt={product.name} className="w-full h-full object-cover" src={product.image} loading="lazy" width={400} height={400} />
@@ -211,12 +200,9 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                       <span className="font-semibold text-primary text-sm">
                         R${product.price.toFixed(2).replace('.', ',')}
                       </span>
-                      <button
-                        onClick={() => handleAddExtra(product)}
-                        className="text-[10px] font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full hover:shadow-md transition-shadow"
-                      >
-                        Pedir
-                      </button>
+                      <span className="text-[10px] font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full">
+                        Ver detalhes
+                      </span>
                     </div>
                   </CardContent>
                 </Card>
@@ -232,8 +218,20 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
         selectedFlavor={selectedFlavor}
         onAddedToCart={() => {
           setIsModalOpen(false);
+          setIsUpsellOpen(true);
+        }}
+      />
+      <UpsellModal
+        isOpen={isUpsellOpen}
+        onClose={() => {
+          setIsUpsellOpen(false);
           onNavigate?.('carrinho');
         }}
+      />
+      <ExtraProductModal
+        isOpen={isExtraModalOpen}
+        onClose={() => setIsExtraModalOpen(false)}
+        product={selectedExtra}
       />
       <OrderStatsModal
         isOpen={isStatsOpen}
