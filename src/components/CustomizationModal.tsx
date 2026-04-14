@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
-import { PizzaFlavor, pizzaSizes, bordas, adicionais } from '@/data/products';
+import { PizzaFlavor, pizzaFlavors, pizzaSizes, bordas, adicionais } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -24,6 +24,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
   const [selectedBorda, setSelectedBorda] = useState<string>('Sem borda recheada');
   const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
   const [observations, setObservations] = useState('');
+  const [isHalfHalf, setIsHalfHalf] = useState(false);
+  const [secondFlavor, setSecondFlavor] = useState<PizzaFlavor | null>(null);
   const { addItem } = useCart();
   const { toast } = useToast();
 
@@ -33,6 +35,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
       setSelectedBorda('Sem borda recheada');
       setSelectedAdicionais([]);
       setObservations('');
+      setIsHalfHalf(false);
+      setSecondFlavor(null);
     }
   }, [isOpen]);
 
@@ -40,6 +44,8 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
 
   const sizeData = pizzaSizes.find(s => s.id === selectedSize)!;
   const basePrice = selectedFlavor.prices[selectedSize as keyof typeof selectedFlavor.prices];
+  const secondPrice = secondFlavor ? secondFlavor.prices[selectedSize as keyof typeof secondFlavor.prices] : 0;
+  const halfHalfPrice = isHalfHalf && secondFlavor ? Math.max(basePrice, secondPrice) : basePrice;
   const bordaItem = bordas.find(b => b.name === selectedBorda)!;
 
   const toggleAdicional = (name: string) => {
@@ -53,7 +59,9 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
     return sum + (item?.price || 0);
   }, 0);
 
-  const totalPrice = basePrice + bordaItem.price + adicionaisTotal;
+  const totalPrice = halfHalfPrice + bordaItem.price + adicionaisTotal;
+
+  const availableSecondFlavors = pizzaFlavors.filter(f => f.id !== selectedFlavor.id);
 
   const handleAddToCart = () => {
     const selectedAdicionaisItems = selectedAdicionais.map(name => {
@@ -61,13 +69,17 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
       return { name: item.name, price: item.price };
     });
 
+    const flavorName = isHalfHalf && secondFlavor
+      ? `${selectedFlavor.name} / ${secondFlavor.name}`
+      : selectedFlavor.name;
+
     addItem({
       flavorId: selectedFlavor.id,
-      flavorName: selectedFlavor.name,
+      flavorName,
       image: selectedFlavor.image,
       size: selectedSize,
-      sizeLabel: `${selectedFlavor.name} (${sizeData.label})`,
-      basePrice,
+      sizeLabel: `${flavorName} (${sizeData.label})`,
+      basePrice: halfHalfPrice,
       borda: selectedBorda,
       bordaPrice: bordaItem.price,
       adicionais: selectedAdicionaisItems,
@@ -78,7 +90,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
 
     toast({
       title: 'Adicionado ao carrinho',
-      description: `${selectedFlavor.name} ${sizeData.label} adicionada.`,
+      description: `${flavorName} ${sizeData.label} adicionada.`,
     });
 
     if (onAddedToCart) {
@@ -99,6 +111,64 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
         </DialogHeader>
 
         <div className="space-y-5 pt-1">
+          {/* Half-and-half toggle */}
+          <div>
+            <button
+              onClick={() => {
+                setIsHalfHalf(!isHalfHalf);
+                if (isHalfHalf) setSecondFlavor(null);
+              }}
+              className={`w-full flex items-center justify-between p-3 rounded-md border transition-colors ${
+                isHalfHalf
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/30'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🍕</span>
+                <div className="text-left">
+                  <span className="text-xs font-semibold text-card-foreground block">Pizza Meio a Meio</span>
+                  <span className="text-[10px] text-muted-foreground">Escolha dois sabores</span>
+                </div>
+              </div>
+              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                isHalfHalf ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+              }`}>
+                {isHalfHalf ? 'Ativado' : 'Ativar'}
+              </span>
+            </button>
+
+            {isHalfHalf && (
+              <div className="mt-3 space-y-2 max-h-40 overflow-y-auto pr-1">
+                <p className="text-[11px] text-muted-foreground mb-1">Escolha o segundo sabor:</p>
+                {availableSecondFlavors.map((flavor) => (
+                  <button
+                    key={flavor.id}
+                    onClick={() => setSecondFlavor(flavor)}
+                    className={`w-full flex items-center gap-2 p-2 rounded-md border text-left transition-colors ${
+                      secondFlavor?.id === flavor.id
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border/50 hover:border-primary/30'
+                    }`}
+                  >
+                    <div className="w-8 h-8 rounded overflow-hidden shrink-0">
+                      <img src={flavor.image} alt={flavor.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-xs font-medium text-card-foreground block truncate">{flavor.name}</span>
+                      <span className="text-[10px] text-muted-foreground">
+                        R${flavor.prices[selectedSize as keyof typeof flavor.prices].toFixed(2).replace('.', ',')}
+                      </span>
+                    </div>
+                    {secondFlavor?.id === flavor.id && (
+                      <span className="text-[10px] text-primary font-medium shrink-0">✓</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Size */}
           <div>
             <p className="text-xs font-semibold text-card-foreground mb-2">Tamanho</p>
@@ -200,8 +270,12 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
                 R${totalPrice.toFixed(2).replace('.', ',')}
               </span>
             </div>
-            <Button onClick={handleAddToCart} className="w-full py-3 rounded-md font-semibold text-sm">
-              Adicionar ao carrinho
+            <Button
+              onClick={handleAddToCart}
+              disabled={isHalfHalf && !secondFlavor}
+              className="w-full py-3 rounded-md font-semibold text-sm"
+            >
+              {isHalfHalf && !secondFlavor ? 'Escolha o segundo sabor' : 'Adicionar ao carrinho'}
             </Button>
           </div>
         </div>

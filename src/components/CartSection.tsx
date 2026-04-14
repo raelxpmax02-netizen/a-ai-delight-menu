@@ -54,7 +54,7 @@ const CartSection = ({ onNavigate }: CartSectionProps) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-base sm:text-lg font-bold text-card-foreground mb-1">{item.sizeLabel}</h3>
-                    {item.borda !== 'Sem borda recheada' && (
+                    {item.borda && item.borda !== 'Sem borda recheada' && item.borda !== '' && (
                       <p className="text-sm text-muted-foreground mb-1">
                         <span className="font-medium">Borda:</span> {item.borda} (+R${item.bordaPrice.toFixed(2).replace('.', ',')})
                       </p>
