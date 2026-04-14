@@ -5,6 +5,8 @@ import { pizzaFlavors, PizzaFlavor, extraProducts } from '@/data/products';
 import { Card, CardContent } from '@/components/ui/card';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface MenuSectionProps {
   onNavigate?: (section: string) => void;
