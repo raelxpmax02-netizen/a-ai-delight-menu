@@ -193,7 +193,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             <h3 className="text-lg font-bold text-card-foreground mb-4">{category}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {products.map((product) => (
-                <Card key={product.id} className="overflow-hidden border-border/50">
+                <Card key={product.id} className="overflow-hidden border-border/50 hover:border-primary/30 transition-all">
                   <CardContent className="p-3 flex items-center gap-3">
                     <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0">
                       <img alt={product.name} className="w-full h-full object-cover" src={product.image} loading="lazy" width={400} height={400} />
@@ -202,15 +202,21 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                       <p className="text-sm font-medium text-card-foreground truncate">{product.name}</p>
                       <p className="text-[11px] text-muted-foreground">{product.description}</p>
                     </div>
-                    <div className="text-right shrink-0">
+                    <div className="flex flex-col items-end gap-1 shrink-0">
                       {product.originalPrice && (
-                        <span className="text-[10px] text-muted-foreground line-through block">
+                        <span className="text-[10px] text-muted-foreground line-through">
                           R${product.originalPrice.toFixed(2).replace('.', ',')}
                         </span>
                       )}
                       <span className="font-semibold text-primary text-sm">
                         R${product.price.toFixed(2).replace('.', ',')}
                       </span>
+                      <button
+                        onClick={() => handleAddExtra(product)}
+                        className="text-[10px] font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full hover:shadow-md transition-shadow"
+                      >
+                        Pedir
+                      </button>
                     </div>
                   </CardContent>
                 </Card>
