@@ -29,11 +29,11 @@ const OperatingHours = () => {
     <section className="py-10 sm:py-14 bg-background">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">Informações</p>
+          <p className="text-[11px] font-semibold text-primary uppercase tracking-[0.15em] mb-1">Informações</p>
           <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">Horários & Contato</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -41,8 +41,8 @@ const OperatingHours = () => {
             className="bg-muted/40 rounded-lg p-5 border border-border/40"
           >
             <div className="flex items-center gap-2 mb-4">
-              <span className={`w-2 h-2 rounded-full ${open ? 'bg-green-500' : 'bg-red-400'}`} />
-              <span className={`text-xs font-medium ${open ? 'text-green-600' : 'text-red-500'}`}>
+              <span className={`w-2 h-2 rounded-full ${open ? 'bg-[hsl(152,55%,42%)]' : 'bg-destructive'}`} />
+              <span className={`text-xs font-medium ${open ? 'text-[hsl(152,55%,42%)]' : 'text-destructive'}`}>
                 {open ? 'Aberto agora' : 'Fechado'}
               </span>
             </div>
@@ -67,7 +67,7 @@ const OperatingHours = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="space-y-4"
+            className="space-y-3"
           >
             <div className="bg-muted/40 rounded-lg p-5 border border-border/40">
               <p className="text-xs font-medium text-card-foreground mb-2">Endereço</p>

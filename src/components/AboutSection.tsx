@@ -1,9 +1,9 @@
 const AboutSection = () => {
   const features = [
-    { title: 'Responsivo', desc: 'Funciona em celular, tablet e desktop sem perder qualidade.' },
-    { title: 'WhatsApp Integrado', desc: 'Pedidos enviados direto para o WhatsApp da pizzaria.' },
+    { title: 'Responsivo', desc: 'Funciona em qualquer dispositivo sem perder qualidade.' },
+    { title: 'WhatsApp Integrado', desc: 'Pedidos enviados direto para o WhatsApp do negócio.' },
     { title: 'Relatórios de Vendas', desc: 'Acompanhe pedidos e receita em tempo real.' },
-    { title: 'Totalmente Personalizável', desc: 'Cores, logo, produtos e preços — tudo do seu jeito.' },
+    { title: 'Personalizável', desc: 'Cores, logo, produtos e preços — tudo do seu jeito.' },
     { title: 'Carregamento Rápido', desc: 'Otimizado para velocidade, mesmo em conexões lentas.' },
     { title: 'Painel Seguro', desc: 'Relatórios protegidos por senha de acesso.' },
   ];
@@ -12,14 +12,14 @@ const AboutSection = () => {
     <section id="sobre" className="py-10 sm:py-14 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">Solução</p>
+          <p className="text-[11px] font-semibold text-primary uppercase tracking-[0.15em] mb-1">Solução</p>
           <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">Por que escolher este cardápio?</h2>
           <p className="text-sm text-muted-foreground mt-2 max-w-lg">
-            Uma solução profissional para transformar o atendimento da sua pizzaria.
+            Uma solução profissional para transformar o atendimento do seu delivery.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-4xl">
           {features.map((feature) => (
             <div key={feature.title} className="bg-background rounded-lg border border-border/40 p-5">
               <h3 className="text-sm font-semibold text-card-foreground mb-1">{feature.title}</h3>

@@ -1,3 +1,5 @@
+import { STORE_NAME } from '@/data/products';
+
 const heroImage = '/images/pizza_hero_v2.jpg';
 
 interface HeroBannerProps {
@@ -9,7 +11,7 @@ const HeroBanner = ({ onNavigate }: HeroBannerProps) => {
     <section className="relative pt-14 overflow-hidden">
       <div className="absolute inset-0">
         <img
-          alt="Pizza artesanal"
+          alt="Delivery premium"
           className="w-full h-full object-cover object-center"
           src={heroImage}
           width={1920}
@@ -18,20 +20,21 @@ const HeroBanner = ({ onNavigate }: HeroBannerProps) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-16 sm:py-20">
+      <div className="relative z-10 container mx-auto px-4 py-16 sm:py-24">
         <div className="max-w-lg">
-          <p className="text-white/60 text-xs font-medium uppercase tracking-widest mb-3">
-            Cardápio Digital Profissional
+          <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[0.2em] mb-4">
+            {STORE_NAME}
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
-            Sabor artesanal direto do forno
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-[1.1] mb-4">
+            Peça rápido,
+            <br />receba em casa.
           </h1>
-          <p className="text-white/70 text-sm sm:text-base leading-relaxed mb-6 max-w-md">
-            Pizzas preparadas com ingredientes selecionados. Escolha seu sabor, personalize e peça agora.
+          <p className="text-white/60 text-sm leading-relaxed mb-8 max-w-sm">
+            Escolha seus favoritos, personalize e finalize pelo WhatsApp. Simples e rápido.
           </p>
           <button
             onClick={() => onNavigate('cardapio')}
-            className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors"
+            className="bg-primary text-primary-foreground px-7 py-3 rounded-lg text-sm font-semibold hover:brightness-110 transition-all"
           >
             Ver cardápio
           </button>

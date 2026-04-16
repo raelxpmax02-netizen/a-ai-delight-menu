@@ -21,7 +21,7 @@ interface CustomizationModalProps {
 
 const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: CustomizationModalProps) => {
   const [selectedSize, setSelectedSize] = useState<string>('grande');
-  const [selectedBorda, setSelectedBorda] = useState<string>('Sem borda recheada');
+  const [selectedBorda, setSelectedBorda] = useState<string>('Sem adicional de borda');
   const [selectedAdicionais, setSelectedAdicionais] = useState<string[]>([]);
   const [observations, setObservations] = useState('');
   const [isHalfHalf, setIsHalfHalf] = useState(false);
@@ -32,7 +32,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
   useEffect(() => {
     if (isOpen) {
       setSelectedSize('grande');
-      setSelectedBorda('Sem borda recheada');
+      setSelectedBorda('Sem adicional de borda');
       setSelectedAdicionais([]);
       setObservations('');
       setIsHalfHalf(false);
@@ -90,7 +90,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
 
     toast({
       title: 'Adicionado ao carrinho',
-      description: `${flavorName} ${sizeData.label} adicionada.`,
+      description: `${flavorName} ${sizeData.label} adicionado.`,
     });
 
     if (onAddedToCart) {
@@ -118,20 +118,17 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
                 setIsHalfHalf(!isHalfHalf);
                 if (isHalfHalf) setSecondFlavor(null);
               }}
-              className={`w-full flex items-center justify-between p-3 rounded-md border transition-colors ${
+              className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all ${
                 isHalfHalf
-                  ? 'border-primary bg-primary/5'
-                  : 'border-border hover:border-primary/30'
+                  ? 'border-primary/40 bg-primary/5'
+                  : 'border-border hover:border-primary/20'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🍕</span>
-                <div className="text-left">
-                  <span className="text-xs font-semibold text-card-foreground block">Pizza Meio a Meio</span>
-                  <span className="text-[10px] text-muted-foreground">Escolha dois sabores</span>
-                </div>
+              <div className="text-left">
+                <span className="text-xs font-semibold text-card-foreground block">Meio a Meio</span>
+                <span className="text-[10px] text-muted-foreground">Escolha dois sabores</span>
               </div>
-              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+              <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${
                 isHalfHalf ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
               }`}>
                 {isHalfHalf ? 'Ativado' : 'Ativar'}
@@ -145,13 +142,13 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
                   <button
                     key={flavor.id}
                     onClick={() => setSecondFlavor(flavor)}
-                    className={`w-full flex items-center gap-2 p-2 rounded-md border text-left transition-colors ${
+                    className={`w-full flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
                       secondFlavor?.id === flavor.id
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border/50 hover:border-primary/30'
+                        ? 'border-primary/40 bg-primary/5'
+                        : 'border-border/50 hover:border-primary/20'
                     }`}
                   >
-                    <div className="w-8 h-8 rounded overflow-hidden shrink-0">
+                    <div className="w-8 h-8 rounded-md overflow-hidden shrink-0">
                       <img src={flavor.image} alt={flavor.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -176,16 +173,16 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
               {pizzaSizes.map((size) => (
                 <button
                   key={size.id}
-                  className={`flex flex-col items-center p-2.5 rounded-md border text-center transition-colors ${
+                  className={`flex flex-col items-center p-2.5 rounded-lg border text-center transition-all ${
                     selectedSize === size.id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:border-primary/30'
+                      ? 'border-primary/40 bg-primary/5'
+                      : 'border-border hover:border-primary/20'
                   }`}
                   onClick={() => setSelectedSize(size.id)}
                 >
                   <span className="text-xs font-medium text-card-foreground">{size.label}</span>
                   <span className="text-[10px] text-muted-foreground">{size.slices} · {size.serves}</span>
-                  <span className="text-primary font-semibold text-sm mt-1">
+                  <span className="text-primary font-bold text-sm mt-1">
                     R${selectedFlavor.prices[size.id as keyof typeof selectedFlavor.prices].toFixed(2).replace('.', ',')}
                   </span>
                 </button>
@@ -200,10 +197,10 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
               {bordas.map((borda) => (
                 <button
                   key={borda.name}
-                  className={`flex items-center justify-between p-2.5 rounded-md border text-left transition-colors ${
+                  className={`flex items-center justify-between p-2.5 rounded-lg border text-left transition-all ${
                     selectedBorda === borda.name
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:border-primary/30'
+                      ? 'border-primary/40 bg-primary/5'
+                      : 'border-border hover:border-primary/20'
                   }`}
                   onClick={() => setSelectedBorda(borda.name)}
                 >
@@ -225,10 +222,10 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
               {adicionais.map((adicional) => (
                 <button
                   key={adicional.name}
-                  className={`w-full flex items-center justify-between p-2.5 rounded-md border transition-colors ${
+                  className={`w-full flex items-center justify-between p-2.5 rounded-lg border transition-all ${
                     selectedAdicionais.includes(adicional.name)
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:border-primary/30'
+                      ? 'border-primary/40 bg-primary/5'
+                      : 'border-border hover:border-primary/20'
                   }`}
                   onClick={() => toggleAdicional(adicional.name)}
                 >
@@ -254,7 +251,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
               Observações <span className="text-muted-foreground font-normal">(opcional)</span>
             </p>
             <Textarea
-              placeholder="Ex: Tirar cebola, bem assada..."
+              placeholder="Ex: Sem cebola, bem passado..."
               value={observations}
               onChange={(e) => setObservations(e.target.value)}
               className="resize-none text-sm"
@@ -273,7 +270,7 @@ const CustomizationModal = ({ isOpen, onClose, selectedFlavor, onAddedToCart }: 
             <Button
               onClick={handleAddToCart}
               disabled={isHalfHalf && !secondFlavor}
-              className="w-full py-3 rounded-md font-semibold text-sm"
+              className="w-full py-3 rounded-lg font-semibold text-sm"
             >
               {isHalfHalf && !secondFlavor ? 'Escolha o segundo sabor' : 'Adicionar ao carrinho'}
             </Button>

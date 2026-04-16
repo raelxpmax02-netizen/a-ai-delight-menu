@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { pizzaFlavors, PizzaFlavor, extraProducts, ExtraProduct } from '@/data/products';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/hooks/use-toast';
 import CustomizationModal from './CustomizationModal';
 import OrderStatsModal from './OrderStatsModal';
 import UpsellModal from './UpsellModal';
@@ -21,6 +23,8 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
   const [isExtraModalOpen, setIsExtraModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('todas');
   const [searchQuery, setSearchQuery] = useState('');
+  const { addItem } = useCart();
+  const { toast } = useToast();
 
   const handleCustomize = (flavor: PizzaFlavor) => {
     setSelectedFlavor(flavor);
@@ -32,8 +36,26 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
     setIsExtraModalOpen(true);
   };
 
+  const handleAddExtra = (product: ExtraProduct) => {
+    addItem({
+      flavorId: product.id,
+      flavorName: product.name,
+      image: product.image,
+      size: 'unico',
+      sizeLabel: product.name,
+      basePrice: product.price,
+      borda: '',
+      bordaPrice: 0,
+      adicionais: [],
+      observations: '',
+      quantity: 1,
+      totalPrice: product.price,
+    });
+    toast({ title: 'Adicionado', description: `${product.name} no carrinho.` });
+  };
+
   const categories = [
-    { id: 'todas', label: 'Todas' },
+    { id: 'todas', label: 'Todos' },
     { id: 'tradicional', label: 'Tradicionais' },
     { id: 'especial', label: 'Especiais' },
     { id: 'premium', label: 'Premium' },
@@ -53,12 +75,12 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
         {/* Section Header */}
         <div className="flex items-end justify-between mb-6">
           <div>
-            <p className="text-xs font-medium text-primary uppercase tracking-widest mb-1">Cardápio</p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">Nossas Pizzas</h2>
+            <p className="text-[11px] font-semibold text-primary uppercase tracking-[0.15em] mb-1">Cardápio</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground">Nossos Produtos</h2>
           </div>
           <button
             onClick={() => setIsStatsOpen(true)}
-            className="text-xs text-muted-foreground hover:text-primary transition-colors underline underline-offset-2"
+            className="text-[11px] text-muted-foreground hover:text-primary transition-colors underline underline-offset-2"
           >
             Relatório
           </button>
@@ -69,10 +91,10 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Buscar pizza ou ingrediente..."
+            placeholder="Buscar produto ou ingrediente..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
           />
         </div>
 
@@ -82,9 +104,9 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap transition-all ${
                 activeCategory === cat.id
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'bg-muted text-muted-foreground hover:text-card-foreground'
               }`}
             >
@@ -93,8 +115,8 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
           ))}
         </div>
 
-        {/* Pizza Cards */}
-        <div className="space-y-3">
+        {/* Product Cards */}
+        <div className="space-y-2.5">
           <AnimatePresence mode="popLayout">
             {filteredFlavors.map((flavor, index) => (
               <motion.div
@@ -106,15 +128,15 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                 layout
               >
                 <Card
-                  className="overflow-hidden border-border/50 hover:border-primary/30 transition-all cursor-pointer group"
+                  className="overflow-hidden border-border/50 hover:border-primary/20 transition-all cursor-pointer group"
                   onClick={() => handleCustomize(flavor)}
                 >
                   <CardContent className="p-0">
                     <div className="flex items-center gap-3 p-3">
-                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0">
                         <img
                           alt={flavor.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           src={flavor.image}
                           loading="lazy"
                           width={800}
@@ -125,12 +147,12 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                         <div className="flex items-center gap-2 mb-0.5">
                           <h3 className="text-sm sm:text-base font-semibold text-card-foreground truncate">{flavor.name}</h3>
                           {flavor.popular && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium shrink-0">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">
                               Popular
                             </span>
                           )}
                           {flavor.category === 'premium' && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/10 text-accent font-medium shrink-0">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-foreground/5 text-muted-foreground font-medium shrink-0">
                               Premium
                             </span>
                           )}
@@ -143,12 +165,12 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                                 R${flavor.originalPrices.broto.toFixed(2).replace('.', ',')}
                               </span>
                             )}
-                            <span className="font-semibold text-primary text-sm">
-                              a partir de R${flavor.prices.broto.toFixed(2).replace('.', ',')}
+                            <span className="font-bold text-primary text-sm">
+                              R${flavor.prices.broto.toFixed(2).replace('.', ',')}
                             </span>
                           </div>
-                          <span className="text-[11px] sm:text-xs font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full group-hover:shadow-md transition-shadow">
-                            Pedir Pizza
+                          <span className="text-[11px] font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full group-hover:shadow-md transition-shadow">
+                            Pedir
                           </span>
                         </div>
                       </div>
@@ -161,7 +183,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
 
           {filteredFlavors.length === 0 && (
             <p className="text-center text-muted-foreground py-8 text-sm">
-              Nenhuma pizza encontrada para "{searchQuery}"
+              Nenhum produto encontrado para "{searchQuery}"
             </p>
           )}
         </div>
@@ -180,7 +202,7 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
               {products.map((product) => (
                 <Card
                   key={product.id}
-                  className="overflow-hidden border-border/50 hover:border-primary/30 transition-all cursor-pointer"
+                  className="overflow-hidden border-border/50 hover:border-primary/20 transition-all cursor-pointer"
                   onClick={() => handleExtraClick(product)}
                 >
                   <CardContent className="p-3 flex items-center gap-3">
@@ -197,11 +219,11 @@ const MenuSection = ({ onNavigate }: MenuSectionProps) => {
                           R${product.originalPrice.toFixed(2).replace('.', ',')}
                         </span>
                       )}
-                      <span className="font-semibold text-primary text-sm">
+                      <span className="font-bold text-primary text-sm">
                         R${product.price.toFixed(2).replace('.', ',')}
                       </span>
                       <span className="text-[10px] font-semibold text-primary-foreground bg-primary px-3 py-1 rounded-full">
-                        Ver detalhes
+                        Pedir
                       </span>
                     </div>
                   </CardContent>
