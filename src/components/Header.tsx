@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { STORE_NAME } from '@/data/products';
 
 interface HeaderProps {
   onNavigate: (section: string) => void;
@@ -41,7 +42,7 @@ const Header = ({ onNavigate, activeSection }: HeaderProps) => {
               isScrolled ? 'text-card-foreground' : 'text-white'
             }`}
           >
-            Sua Pizzaria
+            {STORE_NAME}
           </button>
 
           <nav className="hidden md:flex items-center gap-1">

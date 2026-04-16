@@ -8,10 +8,10 @@ export interface PizzaSize {
 }
 
 export const pizzaSizes: PizzaSize[] = [
-  { id: 'broto', label: 'Broto', slices: '4 fatias', serves: '1 pessoa' },
-  { id: 'media', label: 'Média', slices: '6 fatias', serves: '2 pessoas' },
-  { id: 'grande', label: 'Grande', slices: '8 fatias', serves: '3-4 pessoas' },
-  { id: 'familia', label: 'Família', slices: '12 fatias', serves: '5+ pessoas' },
+  { id: 'broto', label: 'Individual', slices: '1 porção', serves: '1 pessoa' },
+  { id: 'media', label: 'Médio', slices: '2 porções', serves: '2 pessoas' },
+  { id: 'grande', label: 'Grande', slices: '3 porções', serves: '3-4 pessoas' },
+  { id: 'familia', label: 'Família', slices: '4 porções', serves: '5+ pessoas' },
 ];
 
 export interface PizzaFlavor {
@@ -39,9 +39,9 @@ export interface PizzaFlavor {
 export const pizzaFlavors: PizzaFlavor[] = [
   {
     id: 'margherita',
-    name: 'Margherita',
-    description: 'O clássico italiano com ingredientes frescos',
-    ingredients: ['Molho de tomate', 'Mussarela de búfala', 'Manjericão fresco', 'Azeite'],
+    name: 'Clássico da Casa',
+    description: 'Nosso mais pedido, com ingredientes frescos e selecionados',
+    ingredients: ['Molho especial', 'Queijo premium', 'Temperos frescos', 'Azeite'],
     category: 'tradicional',
     image: '/images/pizza_margherita.jpg',
     popular: true,
@@ -50,9 +50,9 @@ export const pizzaFlavors: PizzaFlavor[] = [
   },
   {
     id: 'calabresa',
-    name: 'Calabresa',
-    description: 'Sabor marcante com calabresa defumada',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Calabresa fatiada', 'Cebola'],
+    name: 'Sabor Defumado',
+    description: 'Intenso e marcante, perfeito para quem gosta de sabor forte',
+    ingredients: ['Molho artesanal', 'Queijo', 'Linguiça defumada', 'Cebola'],
     category: 'tradicional',
     image: '/images/pizza_calabresa.jpg',
     popular: true,
@@ -61,18 +61,18 @@ export const pizzaFlavors: PizzaFlavor[] = [
   },
   {
     id: 'portuguesa',
-    name: 'Portuguesa',
-    description: 'Recheio farto e saboroso',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Presunto', 'Ovo', 'Cebola', 'Azeitona', 'Ervilha'],
+    name: 'Completo Especial',
+    description: 'Recheio farto com ingredientes variados',
+    ingredients: ['Molho artesanal', 'Queijo', 'Presunto', 'Ovo', 'Cebola', 'Azeitona'],
     category: 'tradicional',
     image: '/images/pizza_portuguesa.jpg',
     prices: { broto: 25.90, media: 38.90, grande: 48.90, familia: 64.90 },
   },
   {
     id: 'frango-catupiry',
-    name: 'Frango com Catupiry',
-    description: 'Combinação perfeita e cremosa',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Frango desfiado', 'Catupiry'],
+    name: 'Cremoso Premium',
+    description: 'Combinação perfeita entre cremosidade e sabor',
+    ingredients: ['Molho artesanal', 'Queijo', 'Frango desfiado', 'Cream cheese'],
     category: 'especial',
     image: '/images/pizza_frango.jpg',
     popular: true,
@@ -82,8 +82,8 @@ export const pizzaFlavors: PizzaFlavor[] = [
   {
     id: '4-queijos',
     name: 'Quatro Queijos',
-    description: 'Para os amantes de queijo',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Provolone', 'Gorgonzola', 'Parmesão'],
+    description: 'Seleção exclusiva de queijos nobres',
+    ingredients: ['Molho artesanal', 'Mussarela', 'Provolone', 'Gorgonzola', 'Parmesão'],
     category: 'especial',
     image: '/images/pizza_4queijos.jpg',
     prices: { broto: 28.90, media: 42.90, grande: 54.90, familia: 72.90 },
@@ -91,9 +91,9 @@ export const pizzaFlavors: PizzaFlavor[] = [
   },
   {
     id: 'pepperoni',
-    name: 'Pepperoni',
-    description: 'Clássica americana com pepperoni premium',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Pepperoni'],
+    name: 'Pepperoni Artesanal',
+    description: 'Clássico internacional com toque artesanal',
+    ingredients: ['Molho artesanal', 'Mussarela', 'Pepperoni'],
     category: 'especial',
     image: '/images/pizza_pepperoni.jpg',
     popular: true,
@@ -101,9 +101,9 @@ export const pizzaFlavors: PizzaFlavor[] = [
   },
   {
     id: 'bacon-cheddar',
-    name: 'Bacon com Cheddar',
-    description: 'Irresistível combinação defumada',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Bacon crocante', 'Cheddar', 'Cebola caramelizada'],
+    name: 'Bacon & Cheddar',
+    description: 'Combinação irresistível e defumada',
+    ingredients: ['Molho artesanal', 'Mussarela', 'Bacon crocante', 'Cheddar', 'Cebola caramelizada'],
     category: 'premium',
     image: '/images/pizza_bacon_cheddar.jpg',
     prices: { broto: 32.90, media: 46.90, grande: 58.90, familia: 78.90 },
@@ -111,9 +111,9 @@ export const pizzaFlavors: PizzaFlavor[] = [
   },
   {
     id: 'camarao',
-    name: 'Camarão',
-    description: 'Sofisticada com camarões selecionados',
-    ingredients: ['Molho de tomate', 'Mussarela', 'Camarão', 'Catupiry', 'Tomate cereja'],
+    name: 'Premium do Chef',
+    description: 'Nossa criação exclusiva com ingredientes selecionados',
+    ingredients: ['Molho artesanal', 'Mussarela', 'Camarão', 'Cream cheese', 'Tomate cereja'],
     category: 'premium',
     image: '/images/pizza_camarao.jpg',
     prices: { broto: 35.90, media: 52.90, grande: 64.90, familia: 84.90 },
@@ -134,8 +134,8 @@ export interface ExtraProduct {
 export const extraProducts: ExtraProduct[] = [
   {
     id: 'coca-cola-lata',
-    name: 'Coca-Cola Lata',
-    description: '350ml gelada',
+    name: 'Refrigerante Lata',
+    description: '350ml gelado',
     price: 6.00,
     image: '/images/bebidas_v2.jpg',
     category: 'Bebidas',
@@ -158,7 +158,7 @@ export const extraProducts: ExtraProduct[] = [
   },
   {
     id: 'coca-cola-2l',
-    name: 'Coca-Cola 2L',
+    name: 'Refrigerante 2L',
     description: 'Ideal para compartilhar',
     price: 14.00,
     originalPrice: 16.00,
@@ -204,8 +204,8 @@ export const extraProducts: ExtraProduct[] = [
 ];
 
 export const bordas = [
-  { name: 'Sem borda recheada', price: 0 },
-  { name: 'Catupiry', price: 8.00 },
+  { name: 'Sem adicional de borda', price: 0 },
+  { name: 'Cream cheese', price: 8.00 },
   { name: 'Cheddar', price: 8.00 },
   { name: 'Chocolate', price: 10.00 },
 ];
@@ -213,21 +213,21 @@ export const bordas = [
 export const adicionais = [
   { name: 'Bacon extra', price: 6.00, popular: true },
   { name: 'Cheddar extra', price: 5.00 },
-  { name: 'Catupiry extra', price: 5.00 },
+  { name: 'Cream cheese extra', price: 5.00 },
   { name: 'Calabresa extra', price: 5.00 },
   { name: 'Mussarela extra', price: 4.00 },
   { name: 'Cebola caramelizada', price: 4.00 },
   { name: 'Azeitona extra', price: 3.00 },
-  { name: 'Orégano especial', price: 2.00 },
+  { name: 'Tempero especial', price: 2.00 },
 ];
 
 export const WHATSAPP_NUMBER = '5511933651215';
 
-export const STORE_NAME = 'Sua Pizzaria';
+export const STORE_NAME = 'Seu Delivery';
 
-export const STORE_DESCRIPTION = 'Um cardápio digital completo, moderno e personalizado para a sua pizzaria. Sistema de pedidos integrado via WhatsApp, personalização de pizzas, controle de pedidos e relatórios — tudo em um só lugar.';
+export const STORE_DESCRIPTION = 'Cardápio digital completo, moderno e profissional para o seu delivery. Sistema de pedidos integrado via WhatsApp, personalização de produtos e relatórios — tudo em um só lugar.';
 
-export const STORE_DESCRIPTION_2 = 'Aumente suas vendas com um cardápio profissional que seus clientes vão amar. Fácil de usar, responsivo para celular e pronto para impulsionar o seu negócio.';
+export const STORE_DESCRIPTION_2 = 'Aumente suas vendas com um cardápio profissional que seus clientes vão amar. Responsivo, rápido e pronto para impulsionar o seu negócio.';
 
 export const STORE_ADDRESS = {
   street: 'Seu endereço aqui',
